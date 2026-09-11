@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 
 import {
   FaArrowRight,
@@ -19,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SideEnquiry from "@/components/SideEnquiry";
 
 /* =========================================================
    VALIDATION
@@ -48,7 +50,7 @@ const contactSchema = z.object({
 
   propertyType: z
     .string()
-    .min(1, "Please select property type"),
+    .min(1, "Please select property"),
 
   budget: z
     .string()
@@ -73,6 +75,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactUsPage() {
   const [submitted, setSubmitted] = useState(false);
+
   const [serverError, setServerError] = useState("");
 
   const {
@@ -91,7 +94,7 @@ export default function ContactUsPage() {
       name: "",
       email: "",
       phone: "",
-      propertyType: "",
+      propertyType: "dholera-estates",
       budget: "",
       comments: "",
       consent: false,
@@ -102,7 +105,7 @@ export default function ContactUsPage() {
   });
 
   /* =========================================================
-     SUBMIT → PAYLOAD CMS → MONGODB
+     SUBMIT
   ========================================================= */
 
   const onSubmit = async (data: ContactFormData) => {
@@ -125,14 +128,10 @@ export default function ContactUsPage() {
           comments: data.comments || "",
           consent: data.consent,
 
-          source: "contact-us-page",
-          status: "new",
         }),
       });
 
       const result = await response.json();
-
-      console.log("Contact API Response:", result);
 
       if (!response.ok) {
         throw new Error(
@@ -142,19 +141,18 @@ export default function ContactUsPage() {
         );
       }
 
-      console.log(
-        "✅ Contact saved successfully in Payload + MongoDB"
-      );
-
-      reset();
+      reset({
+        name: "",
+        email: "",
+        phone: "",
+        propertyType: "dholera-estates",
+        budget: "",
+        comments: "",
+        consent: false,
+      });
 
       setSubmitted(true);
     } catch (error) {
-      console.error(
-        "❌ Contact submit error:",
-        error
-      );
-
       const message =
         error instanceof Error
           ? error.message
@@ -165,24 +163,108 @@ export default function ContactUsPage() {
   };
 
   return (
-    <><Header />
+    <div className="contact-premium">
+      <Header />
 
       {/* =====================================================
           HERO
       ===================================================== */}
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#111111] to-[#103f80]">
-        <div className="pointer-events-none absolute -left-[120px] -top-[160px] h-[500px] w-[310px] rotate-[32deg] bg-white/10" />
-        <div className="pointer-events-none absolute left-[28%] top-[-210px] h-[620px] w-[300px] rotate-[38deg] bg-[#88a9cc]/20" />
-        <div className="pointer-events-none absolute left-[44%] -top-[190px] h-[560px] w-[250px] -rotate-[38deg] bg-white/8" />
-        <div className="pointer-events-none absolute right-[8%] -top-[190px] h-[560px] w-[290px] rotate-[12deg] bg-[#88a9cc]/25" />
-        <div className="pointer-events-none absolute right-[18%] -top-[100px] h-[330px] w-[240px] rotate-[45deg] bg-white/7" />
-        <div className="pointer-events-none absolute -bottom-[180px] right-[-80px] h-[340px] w-[520px] rotate-[12deg] bg-[#4777ae]/25" />
+      <section
+        className="
+          relative
+          overflow-hidden
+          brand-page-banner internal-page-hero
+        "
+      >
+        <Image
+          src="/images/contact.png"
+          alt="Contact Dholera Estates"
+          fill
+          priority
+          sizes="100vw"
+          className="pointer-events-none object-cover object-center"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-white via-white/88 to-white/24" />
+        {/* DECORATION */}
 
-        <div className="relative z-10 mx-auto max-w-7xl px-5 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <div
+          className="
+            pointer-events-none
+            absolute
+            -left-30
+            -top-40
+
+            h-125
+            w-77.5
+
+            rotate-32
+
+            bg-white/10
+          "
+        />
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            left-[28%]
+            -top-52.5
+
+            h-155
+            w-75
+
+            rotate-38
+
+            bg-white/5
+          "
+        />
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            right-[8%]
+            -top-47.5
+
+            h-140
+            w-72.5
+
+            rotate-12
+
+            bg-[#F90032]/20
+          "
+        />
+
+        {/* CONTENT */}
+
+        <div
+          className="
+            relative
+            z-10
+
+            mx-auto
+            max-w-7xl
+
+            px-5
+            py-7
+
+            sm:px-6
+            sm:py-10
+
+            lg:px-8
+            lg:py-12
+          "
+        >
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{
+              opacity: 0,
+              y: 25,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
             transition={{
               duration: 0.7,
               ease: [0.22, 1, 0.36, 1],
@@ -190,23 +272,68 @@ export default function ContactUsPage() {
             className="max-w-4xl"
           >
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-0.5 w-10 bg-white" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/90 sm:text-xs">
+              <span
+                className="
+                  h-0.5
+                  w-10
+                  bg-[#F90032]
+                "
+              />
+
+              <span
+                className="
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-[0.25em]
+
+                  text-[#F90032]
+
+                  sm:text-xs
+                "
+              >
                 Contact Our Team
               </span>
             </div>
 
-            <h1 className="text-[32px] font-black leading-[1.1] text-white sm:text-4xl md:text-5xl lg:text-[54px]">
-              Let&apos;s Talk About Your{" "}
-              <span className="text-[#b9cde2]">
-                Dholera Investment
+            <h1
+              className="
+                text-[30px]
+                font-black
+                leading-[1.1]
+
+                text-white
+
+                sm:text-4xl
+                md:text-5xl
+                lg:text-[54px]
+              "
+            >
+              Let&apos;s Talk About{" "}
+
+              <span className="text-[#F8FAFC]">
+                Dholera Estates
               </span>
             </h1>
 
-            <p className="mt-4 max-w-2xl text-[14px] leading-7 text-white/90 sm:text-[15px] md:text-base">
-              Connect with our property team for project details,
-              availability, pricing, documentation and Dholera investment
-              guidance.
+            <p
+              className="
+                mt-4
+
+                max-w-2xl
+
+                text-[14px]
+                leading-7
+
+                text-white/90
+
+                sm:text-[15px]
+                md:text-base
+              "
+            >
+              Connect with our property team for Dholera Estates
+              project details, plot availability, documentation,
+              pricing and site visit assistance.
             </p>
           </motion.div>
         </div>
@@ -220,13 +347,16 @@ export default function ContactUsPage() {
         className="
           relative
           overflow-hidden
-          bg-[#f8f7f3]
+
+          bg-white
+
           py-14
+
           sm:py-20
           lg:py-24
         "
       >
-        {/* BACKGROUND */}
+        {/* LIGHT BLUE BACKGROUND EFFECTS */}
 
         <div
           className="
@@ -234,10 +364,14 @@ export default function ContactUsPage() {
             absolute
             -left-40
             top-20
+
             h-96
             w-96
+
             rounded-full
-            bg-[#2f65a7]/8
+
+            bg-[#F8FAFC]
+
             blur-3xl
           "
         />
@@ -248,10 +382,14 @@ export default function ContactUsPage() {
             absolute
             -right-40
             bottom-10
+
             h-96
             w-96
+
             rounded-full
-            bg-[#4777ae]/8
+
+            bg-[#F8FAFC]
+
             blur-3xl
           "
         />
@@ -259,95 +397,16 @@ export default function ContactUsPage() {
         <div
           className="
             relative
+
             mx-auto
             max-w-7xl
+
             px-4
+
             sm:px-6
             lg:px-8
           "
         >
-          {/* =================================================
-              SECTION HEADING
-          ================================================= */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-            }}
-            transition={{
-              duration: 0.6,
-            }}
-            className="
-              mx-auto
-              mb-10
-              max-w-2xl
-              text-center
-              lg:mb-14
-            "
-          >
-            <p
-              className="
-                text-xs
-                font-extrabold
-                uppercase
-                tracking-[0.25em]
-                text-[#2f65a7]
-              "
-            >
-              Get In Touch
-            </p>
-
-            <h2
-              className="
-                mt-3
-                text-3xl
-                font-black
-                leading-tight
-                text-[#1f2937]
-                sm:text-4xl
-                lg:text-5xl
-              "
-            >
-              Find The Right Property
-              <br className="hidden sm:block" />
-              For Your Investment
-            </h2>
-
-            <p
-              className="
-                mx-auto
-                mt-4
-                max-w-xl
-                text-sm
-                leading-7
-                text-[#64748b]
-              "
-            >
-              Tell us your requirement and our team
-              will help you explore the right Dholera
-              property.
-            </p>
-
-            <div
-              className="
-                mx-auto
-                mt-5
-                h-1
-                w-16
-                rounded-full
-                bg-[#2f65a7]
-              "
-            />
-          </motion.div>
-
           {/* =================================================
               CONTACT GRID
           ================================================= */}
@@ -355,9 +414,11 @@ export default function ContactUsPage() {
           <div
             className="
               mx-auto
+
               grid
               max-w-6xl
               gap-6
+
               lg:grid-cols-[0.85fr_1.4fr]
               lg:gap-8
             "
@@ -382,47 +443,29 @@ export default function ContactUsPage() {
                 duration: 0.6,
               }}
               className="
-                mobile-contact-card
                 relative
                 overflow-hidden
+
                 rounded-[30px]
+
                 bg-linear-to-br
-                from-[#2f65a7]
-                to-[#173f6d]
+                from-[#F8FAFC]
+                via-[#F8FAFC]
+                to-[#F8FAFC]
+
+                border
+                border-[#E5E7EB]
+
                 p-7
-                text-white
-                shadow-[0_25px_70px_rgba(255,122,0,0.20)]
+
+                text-[#F90032]
+
+                shadow-[0_10px_28px_rgba(17,17,17,0.08)]
+
                 sm:p-9
                 lg:p-10
               "
             >
-              {/* DECORATION */}
-
-              <div
-                className="
-                  absolute
-                  -right-20
-                  -top-20
-                  h-60
-                  w-60
-                  rounded-full
-                  border-40
-                  border-white/10
-                "
-              />
-
-              <div
-                className="
-                  absolute
-                  -bottom-24
-                  -left-24
-                  h-64
-                  w-64
-                  rounded-full
-                  bg-white/5
-                "
-              />
-
               <div className="relative">
                 <p
                   className="
@@ -430,7 +473,8 @@ export default function ContactUsPage() {
                     font-bold
                     uppercase
                     tracking-[0.25em]
-                    text-white/75
+
+                    text-[#F90032]
                   "
                 >
                   Contact Information
@@ -439,8 +483,12 @@ export default function ContactUsPage() {
                 <h3
                   className="
                     mt-3
+
                     text-2xl
                     font-black
+
+                    brand-gradient-text
+
                     sm:text-3xl
                   "
                 >
@@ -452,14 +500,15 @@ export default function ContactUsPage() {
                 <p
                   className="
                     mt-4
+
                     text-sm
                     leading-7
-                    text-white/80
+
+                    text-[#4B5563]
                   "
                 >
-                  Get clear information about property
-                  selection, investment, pricing and
-                  site visits.
+                  Get clear information about Dholera Estates,
+                  plot selection, documentation, pricing and site visits.
                 </p>
 
                 {/* DETAILS */}
@@ -471,7 +520,11 @@ export default function ContactUsPage() {
                     whileHover={{
                       x: 4,
                     }}
-                    className="flex items-start gap-4"
+                    className="
+                      flex
+                      items-start
+                      gap-4
+                    "
                   >
                     <span
                       className="
@@ -481,9 +534,13 @@ export default function ContactUsPage() {
                         shrink-0
                         items-center
                         justify-center
+
                         rounded-2xl
+
                         bg-white
-                        text-[#2f65a7]
+
+                        text-[#FA7000]
+
                         shadow-lg
                       "
                     >
@@ -497,6 +554,7 @@ export default function ContactUsPage() {
                           font-bold
                           uppercase
                           tracking-wider
+                          brand-gradient-text
                         "
                       >
                         Office Address
@@ -505,9 +563,11 @@ export default function ContactUsPage() {
                       <p
                         className="
                           mt-2
+
                           text-xs
                           leading-6
-                          text-white/80
+
+                          text-[#4B5563]
                         "
                       >
                         7th Floor, Plot No 56A/16,
@@ -525,7 +585,11 @@ export default function ContactUsPage() {
                     whileHover={{
                       x: 4,
                     }}
-                    className="flex items-center gap-4"
+                    className="
+                      flex
+                      items-center
+                      gap-4
+                    "
                   >
                     <span
                       className="
@@ -535,9 +599,12 @@ export default function ContactUsPage() {
                         shrink-0
                         items-center
                         justify-center
+
                         rounded-2xl
+
                         bg-white
-                        text-[#2f65a7]
+
+                        text-[#FA7000]
                       "
                     >
                       <FaPhoneAlt />
@@ -550,6 +617,7 @@ export default function ContactUsPage() {
                           font-bold
                           uppercase
                           tracking-wider
+                          brand-gradient-text
                         "
                       >
                         Phone Number
@@ -558,9 +626,11 @@ export default function ContactUsPage() {
                       <p
                         className="
                           mt-1
+
                           text-sm
                           font-semibold
-                          text-white/85
+
+                          text-[#4B5563]
                         "
                       >
                         +91 92171 04219
@@ -575,7 +645,11 @@ export default function ContactUsPage() {
                     whileHover={{
                       x: 4,
                     }}
-                    className="flex items-center gap-4"
+                    className="
+                      flex
+                      items-center
+                      gap-4
+                    "
                   >
                     <span
                       className="
@@ -585,9 +659,12 @@ export default function ContactUsPage() {
                         shrink-0
                         items-center
                         justify-center
+
                         rounded-2xl
+
                         bg-white
-                        text-[#2f65a7]
+
+                        text-[#FA7000]
                       "
                     >
                       <FaEnvelope />
@@ -600,6 +677,7 @@ export default function ContactUsPage() {
                           font-bold
                           uppercase
                           tracking-wider
+                          brand-gradient-text
                         "
                       >
                         Email Address
@@ -608,10 +686,13 @@ export default function ContactUsPage() {
                       <p
                         className="
                           mt-1
+
                           break-all
+
                           text-xs
                           font-semibold
-                          text-white/85
+
+                          text-[#4B5563]
                         "
                       >
                         customercare@omanaprojects.com
@@ -620,48 +701,58 @@ export default function ContactUsPage() {
                   </motion.a>
                 </div>
 
-                <div className="my-8 h-px bg-white/20" />
+                <div className="my-8 h-px bg-[#F90032]/25" />
 
                 {/* WHATSAPP */}
 
                 <a
-                  href="https://wa.me/919217104219?text=Hello%20Dholera%20Estates%2C%20I%20would%20like%20to%20know%20more%20about%20your%20residential%20plots."
-                  aria-label="Chat with the Dholera Estates team on WhatsApp"
+                  href="https://wa.me/919217104219"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="
-                    contact-whatsapp
                     group
+                    brand-button
+
                     flex
                     w-full
                     items-center
                     justify-center
                     gap-3
+
                     rounded-2xl
-                    bg-[#25D366]
+
                     px-5
                     py-4
+
                     text-sm
                     font-bold
+
                     text-white
+
                     shadow-lg
+
                     transition-all
                     duration-300
-                    hover:-translate-y-1
-                    hover:bg-[#1EBE5D]
-                    hover:text-white
+
+                    hover:bg-[#F8FAFC]
+                    hover:text-[#F90032]
                   "
                 >
-                  <FaWhatsapp className="shrink-0 text-xl text-white" />
+                  <FaWhatsapp
+                    className="
+                      text-lg
+                      text-white
+                    "
+                  />
 
-                  <span className="whitespace-nowrap text-white">
-                    Chat With Our Team
-                  </span>
+                  Chat With Our Team
 
                   <FaArrowRight
                     className="
                       text-xs
+
                       transition-transform
+
                       group-hover:translate-x-1
                     "
                   />
@@ -691,12 +782,18 @@ export default function ContactUsPage() {
               className="
                 relative
                 overflow-hidden
+
                 rounded-[30px]
+
                 border
-                border-[#dbe3ec]
+                border-[#E5E7EB]
+
                 bg-white
+
                 p-5
-                shadow-[0_25px_70px_rgba(255,122,0,0.08)]
+
+                shadow-[0_10px_28px_rgba(17,17,17,0.08)]
+
                 sm:p-8
                 lg:p-10
               "
@@ -708,21 +805,19 @@ export default function ContactUsPage() {
                   absolute
                   left-0
                   top-0
+
                   h-1
                   w-full
+
                   bg-linear-to-r
-                  from-[#2f65a7]
-                  via-[#88a9cc]
-                  to-[#2f65a7]
+                  from-[#FA7000]
+                  via-[#FA7000]
+                  to-[#FA7000]
                 "
               />
 
               <AnimatePresence mode="wait">
                 {!submitted ? (
-                  /* =================================================
-                     FORM SCREEN
-                  ================================================= */
-
                   <motion.div
                     key="form"
                     initial={{
@@ -740,7 +835,8 @@ export default function ContactUsPage() {
                           font-bold
                           uppercase
                           tracking-[0.25em]
-                          text-[#2f65a7]
+
+                          text-[#F90032]
                         "
                       >
                         Quick Enquiry
@@ -749,9 +845,12 @@ export default function ContactUsPage() {
                       <h3
                         className="
                           mt-2
+
                           text-2xl
                           font-black
-                          text-[#1f2937]
+
+                          brand-gradient-text
+
                           sm:text-3xl
                         "
                       >
@@ -761,15 +860,17 @@ export default function ContactUsPage() {
                       <p
                         className="
                           mt-2
+
                           text-xs
                           leading-6
-                          text-[#64748b]
+
+                          text-[#4B5563]
+
                           sm:text-sm
                         "
                       >
-                        Fill in the details and our
-                        property consultant will contact
-                        you shortly.
+                        Fill in the details and our property consultant
+                        will contact you shortly.
                       </p>
                     </div>
 
@@ -785,9 +886,11 @@ export default function ContactUsPage() {
                           className="
                             mb-2
                             block
+
                             text-xs
                             font-bold
-                            text-[#1f2937]
+
+                            brand-gradient-text
                           "
                         >
                           Full Name *
@@ -798,26 +901,31 @@ export default function ContactUsPage() {
                             flex
                             items-center
                             gap-3
+
                             rounded-xl
+
                             border
-                            bg-[#ffffff]
+
+                            bg-[#F8FAFC]
+
                             px-4
+
                             transition-all
 
                             ${
                               errors.name
                                 ? "border-red-500"
-                                : "border-[#dbe3ec] focus-within:border-[#2f65a7]"
+                                : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                             }
 
                             focus-within:bg-white
-                            focus-within:shadow-[0_0_0_4px_rgba(255,122,0,0.06)]
+                            focus-within:shadow-[0_0_0_4px_rgba(249,0,50,0.08)]
                           `}
                         >
                           <FaUser
                             className="
                               text-sm
-                              text-[#2f65a7]
+                              text-[#F90032]
                             "
                           />
 
@@ -827,12 +935,18 @@ export default function ContactUsPage() {
                             {...register("name")}
                             className="
                               w-full
+
                               bg-transparent
+
                               py-3.5
+
                               text-sm
-                              text-[#1f2937]
+
+                              text-[#F90032]
+
                               outline-none
-                              placeholder:text-[#94a3b8]
+
+                              placeholder:text-[#4B5563]/70
                             "
                           />
                         </div>
@@ -842,6 +956,7 @@ export default function ContactUsPage() {
                             className="
                               ml-1
                               mt-1
+
                               text-xs
                               text-red-500
                             "
@@ -861,9 +976,11 @@ export default function ContactUsPage() {
                             className="
                               mb-2
                               block
+
                               text-xs
                               font-bold
-                              text-[#1f2937]
+
+                              brand-gradient-text
                             "
                           >
                             Email Address *
@@ -874,19 +991,28 @@ export default function ContactUsPage() {
                               flex
                               items-center
                               gap-3
+
                               rounded-xl
+
                               border
-                              bg-[#ffffff]
+
+                              bg-[#F8FAFC]
+
                               px-4
 
                               ${
                                 errors.email
                                   ? "border-red-500"
-                                  : "border-[#dbe3ec] focus-within:border-[#2f65a7]"
+                                  : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                               }
                             `}
                           >
-                            <FaEnvelope className="text-xs text-[#2f65a7]" />
+                            <FaEnvelope
+                              className="
+                                text-xs
+                                text-[#F90032]
+                              "
+                            />
 
                             <input
                               type="email"
@@ -895,12 +1021,18 @@ export default function ContactUsPage() {
                               className="
                                 min-w-0
                                 w-full
+
                                 bg-transparent
+
                                 py-3.5
+
                                 text-sm
-                                text-[#1f2937]
+
+                                text-[#F90032]
+
                                 outline-none
-                                placeholder:text-[#94a3b8]
+
+                                placeholder:text-[#4B5563]/70
                               "
                             />
                           </div>
@@ -910,6 +1042,7 @@ export default function ContactUsPage() {
                               className="
                                 ml-1
                                 mt-1
+
                                 text-xs
                                 text-red-500
                               "
@@ -926,9 +1059,11 @@ export default function ContactUsPage() {
                             className="
                               mb-2
                               block
+
                               text-xs
                               font-bold
-                              text-[#1f2937]
+
+                              brand-gradient-text
                             "
                           >
                             Phone Number *
@@ -939,26 +1074,32 @@ export default function ContactUsPage() {
                               flex
                               items-center
                               overflow-hidden
+
                               rounded-xl
+
                               border
-                              bg-[#ffffff]
+
+                              bg-[#F8FAFC]
 
                               ${
                                 errors.phone
                                   ? "border-red-500"
-                                  : "border-[#dbe3ec] focus-within:border-[#2f65a7]"
+                                  : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                               }
                             `}
                           >
                             <span
                               className="
                                 border-r
-                                border-[#dbe3ec]
+                                border-[#E5E7EB]
+
                                 px-3
                                 py-3.5
+
                                 text-xs
                                 font-bold
-                                text-[#2f65a7]
+
+                                text-[#F90032]
                               "
                             >
                               +91
@@ -980,13 +1121,19 @@ export default function ContactUsPage() {
                               className="
                                 min-w-0
                                 w-full
+
                                 bg-transparent
+
                                 px-3
                                 py-3.5
+
                                 text-sm
-                                text-[#1f2937]
+
+                                text-[#F90032]
+
                                 outline-none
-                                placeholder:text-[#94a3b8]
+
+                                placeholder:text-[#4B5563]/70
                               "
                             />
                           </div>
@@ -996,6 +1143,7 @@ export default function ContactUsPage() {
                               className="
                                 ml-1
                                 mt-1
+
                                 text-xs
                                 text-red-500
                               "
@@ -1016,56 +1164,44 @@ export default function ContactUsPage() {
                             className="
                               mb-2
                               block
+
                               text-xs
                               font-bold
-                              text-[#1f2937]
+
+                              brand-gradient-text
                             "
                           >
-                            Property Type *
+                            Property *
                           </label>
 
                           <select
                             {...register("propertyType")}
-                            defaultValue=""
-                            className={`
+                            className="
                               w-full
+
                               rounded-xl
+
                               border
-                              bg-[#ffffff]
+                              border-[#E5E7EB]
+
+                              bg-[#F8FAFC]
+
                               px-4
                               py-3.5
+
                               text-sm
-                              text-[#1f2937]
+
+                              text-[#F90032]
+
                               outline-none
 
-                              ${
-                                errors.propertyType
-                                  ? "border-red-500"
-                                  : "border-[#dbe3ec] focus:border-[#2f65a7]"
-                              }
-                            `}
+                              focus:border-[#FA7000]
+                            "
                           >
-                            <option value="">
-                              Select Property Type
-                            </option>
-
                             <option value="dholera-estates">
-                              Dholera Estates Residential Plot
+                              Dholera Estates
                             </option>
                           </select>
-
-                          {errors.propertyType && (
-                            <p
-                              className="
-                                ml-1
-                                mt-1
-                                text-xs
-                                text-red-500
-                              "
-                            >
-                              {errors.propertyType.message}
-                            </p>
-                          )}
                         </div>
 
                         {/* BUDGET */}
@@ -1075,9 +1211,11 @@ export default function ContactUsPage() {
                             className="
                               mb-2
                               block
+
                               text-xs
                               font-bold
-                              text-[#1f2937]
+
+                              brand-gradient-text
                             "
                           >
                             Budget *
@@ -1087,20 +1225,28 @@ export default function ContactUsPage() {
                             {...register("budget")}
                             defaultValue=""
                             className={`
+                              contact-budget-select
                               w-full
+
                               rounded-xl
+
                               border
-                              bg-[#ffffff]
+
+                              bg-[#F8FAFC]
+
                               px-4
                               py-3.5
+
                               text-sm
-                              text-[#1f2937]
+
+                              text-[#F90032]
+
                               outline-none
 
                               ${
                                 errors.budget
                                   ? "border-red-500"
-                                  : "border-[#dbe3ec] focus:border-[#2f65a7]"
+                                  : "border-[#E5E7EB] focus:border-[#FA7000]"
                               }
                             `}
                           >
@@ -1130,6 +1276,7 @@ export default function ContactUsPage() {
                               className="
                                 ml-1
                                 mt-1
+
                                 text-xs
                                 text-red-500
                               "
@@ -1147,9 +1294,11 @@ export default function ContactUsPage() {
                           className="
                             mb-2
                             block
+
                             text-xs
                             font-bold
-                            text-[#1f2937]
+
+                            brand-gradient-text
                           "
                         >
                           Message
@@ -1162,17 +1311,26 @@ export default function ContactUsPage() {
                           className="
                             w-full
                             resize-none
+
                             rounded-xl
+
                             border
-                            border-[#dbe3ec]
-                            bg-[#ffffff]
+                            border-[#E5E7EB]
+
+                            bg-[#F8FAFC]
+
                             px-4
                             py-3.5
+
                             text-sm
-                            text-[#1f2937]
+
+                            text-[#F90032]
+
                             outline-none
-                            placeholder:text-[#94a3b8]
-                            focus:border-[#2f65a7]
+
+                            placeholder:text-[#4B5563]/70
+
+                            focus:border-[#FA7000]
                             focus:bg-white
                           "
                         />
@@ -1182,6 +1340,7 @@ export default function ContactUsPage() {
                             className="
                               ml-1
                               mt-1
+
                               text-xs
                               text-red-500
                             "
@@ -1200,9 +1359,11 @@ export default function ContactUsPage() {
                             cursor-pointer
                             items-start
                             gap-3
+
                             text-xs
                             leading-5
-                            text-[#64748b]
+
+                            text-[#111111]
                           "
                         >
                           <input
@@ -1210,17 +1371,18 @@ export default function ContactUsPage() {
                             {...register("consent")}
                             className="
                               mt-0.5
+
                               h-4
                               w-4
                               shrink-0
-                              accent-[#2f65a7]
+
+                              accent-[#F90032]
                             "
                           />
 
                           <span>
-                            I agree to use my information
-                            for enquiry and marketing
-                            communication.
+                            I agree to use my information for enquiry
+                            and marketing communication.
                           </span>
                         </label>
 
@@ -1229,6 +1391,7 @@ export default function ContactUsPage() {
                             className="
                               ml-7
                               mt-1
+
                               text-xs
                               text-red-500
                             "
@@ -1252,11 +1415,15 @@ export default function ContactUsPage() {
                           }}
                           className="
                             rounded-xl
+
                             border
                             border-red-200
+
                             bg-red-50
+
                             px-4
                             py-3
+
                             text-sm
                             text-red-600
                           "
@@ -1274,7 +1441,6 @@ export default function ContactUsPage() {
                           !isSubmitting
                             ? {
                                 y: -2,
-                                scale: 1.01,
                               }
                             : undefined
                         }
@@ -1287,29 +1453,42 @@ export default function ContactUsPage() {
                         }
                         className="
                           group
+                          brand-button
                           relative
+
                           flex
                           w-full
                           items-center
                           justify-center
                           gap-3
+
                           overflow-hidden
+
                           rounded-xl
-                          bg-[#2f65a7]
+
+                          bg-[#FA7000]
+
                           px-6
                           py-4
+
                           text-xs
                           font-extrabold
                           uppercase
                           tracking-widest
+
                           text-white
-                          shadow-[0_12px_30px_rgba(255,122,0,0.25)]
+
+                          shadow-[0_4px_12px_rgba(17,17,17,0.08)]
+
                           transition-all
                           duration-300
-                          hover:bg-[#4777ae]
-                          hover:shadow-[0_16px_36px_rgba(255,122,0,0.32)]
+
+                          hover:bg-[#F90032]
+                          hover:shadow-[0_10px_28px_rgba(17,17,17,0.08)]
+
                           disabled:cursor-not-allowed
                           disabled:opacity-60
+
                           sm:w-auto
                           sm:min-w-52
                         "
@@ -1321,15 +1500,20 @@ export default function ContactUsPage() {
                             absolute
                             -left-full
                             top-0
+
                             h-full
                             w-1/2
+
                             -skew-x-12
+
                             bg-linear-to-r
                             from-transparent
                             via-white/25
                             to-transparent
+
                             transition-all
                             duration-700
+
                             group-hover:left-[130%]
                           "
                         />
@@ -1345,7 +1529,9 @@ export default function ContactUsPage() {
                             className="
                               relative
                               z-10
+
                               transition-transform
+
                               group-hover:translate-x-1
                             "
                           />
@@ -1379,7 +1565,9 @@ export default function ContactUsPage() {
                       flex-col
                       items-center
                       justify-center
+
                       px-5
+
                       text-center
                     "
                   >
@@ -1400,10 +1588,14 @@ export default function ContactUsPage() {
                         w-20
                         items-center
                         justify-center
+
                         rounded-full
-                        bg-[#2f65a7]
+
+                        bg-[#F90032]
+
                         text-white
-                        shadow-[0_15px_35px_rgba(255,122,0,0.30)]
+
+                        shadow-[0_4px_12px_rgba(17,17,17,0.08)]
                       "
                     >
                       <FaCheckCircle size={34} />
@@ -1412,11 +1604,13 @@ export default function ContactUsPage() {
                     <p
                       className="
                         mt-6
+
                         text-[10px]
                         font-bold
                         uppercase
                         tracking-[0.25em]
-                        text-[#2f65a7]
+
+                        text-[#F90032]
                       "
                     >
                       Enquiry Submitted
@@ -1425,9 +1619,11 @@ export default function ContactUsPage() {
                     <h3
                       className="
                         mt-2
+
                         text-3xl
                         font-black
-                        text-[#1f2937]
+
+                        text-[#F90032]
                       "
                     >
                       Thank You!
@@ -1436,26 +1632,30 @@ export default function ContactUsPage() {
                     <div
                       className="
                         mt-4
+
                         h-1
                         w-12
+
                         rounded-full
-                        bg-[#2f65a7]
+
+                        bg-[#F90032]
                       "
                     />
 
                     <p
                       className="
                         mt-5
+
                         max-w-sm
+
                         text-sm
                         leading-7
-                        text-[#64748b]
+
+                        text-[#4B5563]
                       "
                     >
-                      Your contact request has been
-                      submitted successfully. Our
-                      property consultant will contact
-                      you shortly.
+                      Your contact request has been submitted successfully.
+                      Our property consultant will contact you shortly.
                     </p>
 
                     <motion.button
@@ -1471,19 +1671,27 @@ export default function ContactUsPage() {
                         scale: 0.97,
                       }}
                       className="
+                        brand-button
                         mt-7
+
                         rounded-xl
-                        bg-[#2f65a7]
+
+                        bg-[#FA7000]
+
                         px-6
                         py-3
+
                         text-xs
                         font-bold
                         uppercase
                         tracking-wider
+
                         text-white
+
                         transition-all
                         duration-300
-                        hover:bg-[#4777ae]
+
+                        hover:bg-[#F90032]
                       "
                     >
                       Send Another Enquiry
@@ -1497,6 +1705,7 @@ export default function ContactUsPage() {
       </section>
 
       <Footer />
-    </>
+      <SideEnquiry />
+    </div>
   );
 }

@@ -35,10 +35,7 @@ const formSchema = z.object({
   phone: z
     .string()
     .min(1, "Phone number is required")
-    .regex(
-      /^[0-9]{10}$/,
-      "Enter a valid 10-digit mobile number"
-    ),
+    .regex(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -57,10 +54,7 @@ export default function SideEnquiry() {
     handleSubmit,
     reset,
     setValue,
-    formState: {
-      errors,
-      isSubmitting,
-    },
+    formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
 
@@ -106,8 +100,6 @@ export default function SideEnquiry() {
     try {
       setServerError("");
 
-      console.log("Submitting enquiry:", data);
-
       const response = await fetch("/api/enquiries", {
         method: "POST",
 
@@ -120,36 +112,25 @@ export default function SideEnquiry() {
           email: data.email,
           phone: data.phone,
 
-          // matches models/Enquiry.ts
           property: "Dholera Estates",
 
-          // current form does not have message field
           message: "",
+
+          source: "dholeraestates-side-enquiry-form",
         }),
       });
 
       const result = await response.json();
 
-      console.log("API response:", result);
-
       if (!response.ok) {
         throw new Error(
-          result.message ||
-            "Failed to submit enquiry"
+          result.message || "Failed to submit enquiry"
         );
       }
 
-      console.log(
-        "✅ Enquiry successfully saved in MongoDB"
-      );
-
       reset();
-
-      // Show existing thank-you screen
       setSubmitted(true);
     } catch (error) {
-      console.error("❌ Enquiry error:", error);
-
       const message =
         error instanceof Error
           ? error.message
@@ -187,47 +168,58 @@ export default function SideEnquiry() {
               ease: [0.22, 1, 0.36, 1],
             }}
             whileHover={{
-              x: -4,
-              scale: 1.02,
+              x: -2,
+              y: -2,
             }}
             whileTap={{
-              scale: 0.96,
+              y: 0,
             }}
             className="
               fixed
+              enquiry-premium
+              max-[539px]:hidden
               right-0
               top-1/2
               z-9990
+
               flex
-              h-24.5
-              w-8.5
+              h-36
+              w-10
               -translate-y-1/2
               items-center
               justify-center
+
               overflow-hidden
-              rounded-l-lg
-              border-y
-              border-l
-              border-[#2f65a7]/25
-              bg-[#2f65a7]
+
+              rounded-l-xl
+              bg-[linear-gradient(180deg,#ff7914_0%,#f90032_40%,#960aaa_72%,#0082fa_100%)]
+
               text-white
-              shadow-[-4px_6px_18px_rgba(255,122,0,0.20)]
+
+              shadow-[-2px_2px_8px_rgba(17,17,17,0.12)]
+
               transition-all
-              duration-300
-              hover:bg-[#4777ae]
-              sm:h-27.5
-              sm:w-9.5
+              duration-200
+
+              hover:brightness-110
+              hover:shadow-[-6px_8px_24px_rgba(249,0,50,0.32)]
+
+              sm:h-40
+              sm:w-10
             "
           >
+            {/* BUTTON LIGHT EFFECT */}
+
             <span
               className="
                 pointer-events-none
                 absolute
                 inset-0
+
                 bg-linear-to-b
                 from-white/15
                 via-transparent
-                to-white/5
+                to-[#F90032]/10
               "
             />
 
@@ -237,10 +229,13 @@ export default function SideEnquiry() {
                 z-10
                 rotate-180
                 whitespace-nowrap
+
                 text-[10px]
                 font-bold
                 tracking-[0.07em]
+
                 [writing-mode:vertical-rl]
+
                 sm:text-[11px]
               "
             >
@@ -257,7 +252,9 @@ export default function SideEnquiry() {
       <AnimatePresence>
         {open && (
           <>
-            {/* OVERLAY */}
+            {/* =================================================
+                OVERLAY
+            ================================================= */}
 
             <motion.div
               initial={{ opacity: 0 }}
@@ -269,14 +266,18 @@ export default function SideEnquiry() {
               onClick={handleClose}
               className="
                 fixed
+                enquiry-premium
                 inset-0
-                z-9997
-                bg-[#103f80]/35
+                z-[9997]
+
+                bg-[#111111]/70
                 backdrop-blur-[2px]
               "
             />
 
-            {/* SLIDER */}
+            {/* =================================================
+                SLIDER
+            ================================================= */}
 
             <motion.div
               initial={{
@@ -305,33 +306,64 @@ export default function SideEnquiry() {
                 fixed
                 right-0
                 top-1/2
-                z-9998
+                z-[9998]
+
                 w-[88%]
-                max-w-85
+                max-w-[340px]
                 -translate-y-1/2
+
                 overflow-hidden
+
                 rounded-l-[20px]
                 rounded-r-none
+
                 border-y
                 border-l
-                border-[#2f65a7]/20
-                bg-[#ffffff]
-                shadow-[-15px_15px_45px_rgba(8,26,58,0.25)]
-                sm:max-w-91.25
+                border-[#E5E7EB]
+
+                bg-[#F8FAFC]
+
+                shadow-[-15px_15px_45px_rgba(249,0,50,0.22)]
+
+                sm:max-w-[365px]
                 sm:rounded-l-3xl
               "
             >
-              {/* CLOSE */}
+              {/* =================================================
+                  SOFT BLUE GLOW
+              ================================================= */}
+
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  -right-16
+                  -top-16
+
+                  h-40
+                  w-40
+
+                  rounded-full
+
+                  bg-transparent
+
+                  blur-3xl
+                "
+              />
+
+              {/* =================================================
+                  CLOSE
+              ================================================= */}
 
               <motion.button
                 type="button"
                 onClick={handleClose}
                 whileHover={{
                   rotate: 90,
-                  scale: 1.08,
+                  y: -2,
                 }}
                 whileTap={{
-                  scale: 0.9,
+                  y: 0,
                 }}
                 aria-label="Close enquiry"
                 className="
@@ -339,22 +371,35 @@ export default function SideEnquiry() {
                   right-3
                   top-3
                   z-30
+
                   flex
                   h-7
                   w-7
                   items-center
                   justify-center
+
                   rounded-full
+
                   border
-                  border-[#2f65a7]/20
+                  border-[#E5E7EB]
+
                   bg-white
-                  text-[#103f80]
+
+                  text-[#FA7000]
+
                   shadow-sm
+
                   transition-all
                   duration-300
-                  hover:border-[#2f65a7]
-                  hover:bg-[#2f65a7]
+
+                  hover:border-[#F90032]
+                  hover:bg-[#F90032]
                   hover:text-white
+
+                  focus-visible:outline-2
+                  focus-visible:outline-offset-2
+                  focus-visible:outline-[#F90032]/45
+
                   sm:h-8
                   sm:w-8
                 "
@@ -384,23 +429,54 @@ export default function SideEnquiry() {
                       duration: 0.3,
                     }}
                   >
-                    {/* HEADER */}
+                    {/* =================================================
+                        HEADER
+                    ================================================= */}
 
                     <div
                       className="
                         relative
+
                         border-b
-                        border-[#2f65a7]/15
-                        bg-[#f1f5f9]
+                        border-[#E5E7EB]
+
+                        bg-linear-to-b
+                        from-[#F8FAFC]
+                        to-[#F8FAFC]
+
                         px-4
                         pb-3
                         pt-4
+
                         text-center
+
                         sm:px-5
                         sm:pb-4
                         sm:pt-5
                       "
                     >
+                      {/* LIGHT BLUE GLOW */}
+
+                      <div
+                        className="
+                          pointer-events-none
+                          absolute
+                          left-1/2
+                          top-0
+
+                          h-20
+                          w-32
+
+                          -translate-x-1/2
+
+                          rounded-full
+
+                          bg-[#F8FAFC]
+
+                          blur-2xl
+                        "
+                      />
+
                       <motion.p
                         initial={{
                           opacity: 0,
@@ -414,12 +490,18 @@ export default function SideEnquiry() {
                           delay: 0.15,
                         }}
                         className="
+                          relative
+                          z-10
+
                           mx-auto
+
                           text-[8px]
                           font-bold
                           uppercase
                           tracking-[0.2em]
-                          text-[#2f65a7]
+
+                          text-[#F90032]
+
                           sm:text-[9px]
                         "
                       >
@@ -439,10 +521,16 @@ export default function SideEnquiry() {
                           delay: 0.2,
                         }}
                         className="
+                          relative
+                          z-10
+
                           mt-1
+
                           text-[19px]
                           font-extrabold
-                          text-[#103f80]
+
+                          text-[#F90032]
+
                           sm:text-[22px]
                         "
                       >
@@ -461,11 +549,17 @@ export default function SideEnquiry() {
                           duration: 0.4,
                         }}
                         className="
+                          relative
+                          z-10
+
                           mx-auto
                           mt-2
-                          h-0.75
+
+                          h-[3px]
+
                           rounded-full
-                          bg-[#2f65a7]
+
+                          bg-[#F90032]
                         "
                       />
 
@@ -480,12 +574,17 @@ export default function SideEnquiry() {
                           delay: 0.28,
                         }}
                         className="
+                          relative
+                          z-10
+
                           mx-auto
                           mt-2
-                          max-w-65
+                          max-w-[260px]
+
                           text-[10px]
                           leading-4
-                          text-gray-500
+                          text-[#111111]
+
                           sm:text-[11px]
                           sm:leading-5
                         "
@@ -495,12 +594,20 @@ export default function SideEnquiry() {
                       </motion.p>
                     </div>
 
-                    {/* FORM BODY */}
+                    {/* =================================================
+                        FORM BODY
+                    ================================================= */}
 
                     <div
                       className="
+                        relative
+                        bg-linear-to-b
+                        from-[#F8FAFC]
+                        to-[#F8FAFC]
+
                         px-4
                         py-4
+
                         sm:px-5
                         sm:py-5
                       "
@@ -510,7 +617,9 @@ export default function SideEnquiry() {
                         noValidate
                         className="space-y-2.5"
                       >
-                        {/* NAME */}
+                        {/* =================================================
+                            NAME
+                        ================================================= */}
 
                         <div>
                           <label
@@ -518,9 +627,11 @@ export default function SideEnquiry() {
                             className="
                               mb-1
                               block
+
                               text-[10px]
                               font-semibold
-                              text-[#103f80]
+
+                              text-[#F90032]
                             "
                           >
                             Name
@@ -531,27 +642,31 @@ export default function SideEnquiry() {
                               flex
                               items-center
                               gap-2.5
+
                               rounded-lg
                               border
+
                               bg-white
+
                               px-3
+
                               transition-all
                               duration-300
 
                               ${
                                 errors.name
-                                  ? "border-red-500"
-                                  : "border-[#2f65a7]/20 focus-within:border-[#2f65a7]"
+                                  ? "border-red-500 bg-red-50/20"
+                                  : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                               }
 
-                              focus-within:shadow-[0_5px_15px_rgba(255,122,0,0.08)]
+                              focus-within:shadow-[0_1px_3px_rgba(17,17,17,0.08)]
                             `}
                           >
                             <FaUser
                               className={
                                 errors.name
                                   ? "text-xs text-red-500"
-                                  : "text-xs text-[#2f65a7]"
+                                  : "text-xs text-[#F90032]"
                               }
                             />
 
@@ -562,12 +677,17 @@ export default function SideEnquiry() {
                               {...register("name")}
                               className="
                                 w-full
+
                                 bg-transparent
+
                                 py-2.5
+
                                 text-[12px]
-                                text-[#103f80]
+                                text-[#F90032]
+
                                 outline-none
-                                placeholder:text-gray-400
+
+                                placeholder:text-[#4B5563]/70
                               "
                             />
                           </div>
@@ -586,7 +706,9 @@ export default function SideEnquiry() {
                           )}
                         </div>
 
-                        {/* EMAIL */}
+                        {/* =================================================
+                            EMAIL
+                        ================================================= */}
 
                         <div>
                           <label
@@ -594,9 +716,11 @@ export default function SideEnquiry() {
                             className="
                               mb-1
                               block
+
                               text-[10px]
                               font-semibold
-                              text-[#103f80]
+
+                              text-[#F90032]
                             "
                           >
                             Email
@@ -607,27 +731,31 @@ export default function SideEnquiry() {
                               flex
                               items-center
                               gap-2.5
+
                               rounded-lg
                               border
+
                               bg-white
+
                               px-3
+
                               transition-all
                               duration-300
 
                               ${
                                 errors.email
-                                  ? "border-red-500"
-                                  : "border-[#2f65a7]/20 focus-within:border-[#2f65a7]"
+                                  ? "border-red-500 bg-red-50/20"
+                                  : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                               }
 
-                              focus-within:shadow-[0_5px_15px_rgba(255,122,0,0.08)]
+                              focus-within:shadow-[0_1px_3px_rgba(17,17,17,0.08)]
                             `}
                           >
                             <FaEnvelope
                               className={
                                 errors.email
                                   ? "text-xs text-red-500"
-                                  : "text-xs text-[#2f65a7]"
+                                  : "text-xs text-[#F90032]"
                               }
                             />
 
@@ -638,12 +766,17 @@ export default function SideEnquiry() {
                               {...register("email")}
                               className="
                                 w-full
+
                                 bg-transparent
+
                                 py-2.5
+
                                 text-[12px]
-                                text-[#103f80]
+                                text-[#F90032]
+
                                 outline-none
-                                placeholder:text-gray-400
+
+                                placeholder:text-[#4B5563]/70
                               "
                             />
                           </div>
@@ -662,7 +795,9 @@ export default function SideEnquiry() {
                           )}
                         </div>
 
-                        {/* PHONE */}
+                        {/* =================================================
+                            PHONE
+                        ================================================= */}
 
                         <div>
                           <label
@@ -670,9 +805,11 @@ export default function SideEnquiry() {
                             className="
                               mb-1
                               block
+
                               text-[10px]
                               font-semibold
-                              text-[#103f80]
+
+                              text-[#F90032]
                             "
                           >
                             Phone
@@ -683,27 +820,31 @@ export default function SideEnquiry() {
                               flex
                               items-center
                               gap-2.5
+
                               rounded-lg
                               border
+
                               bg-white
+
                               px-3
+
                               transition-all
                               duration-300
 
                               ${
                                 errors.phone
-                                  ? "border-red-500"
-                                  : "border-[#2f65a7]/20 focus-within:border-[#2f65a7]"
+                                  ? "border-red-500 bg-red-50/20"
+                                  : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                               }
 
-                              focus-within:shadow-[0_5px_15px_rgba(255,122,0,0.08)]
+                              focus-within:shadow-[0_1px_3px_rgba(17,17,17,0.08)]
                             `}
                           >
                             <FaPhoneAlt
                               className={
                                 errors.phone
                                   ? "text-xs text-red-500"
-                                  : "text-xs text-[#2f65a7]"
+                                  : "text-xs text-[#F90032]"
                               }
                             />
 
@@ -732,12 +873,17 @@ export default function SideEnquiry() {
                               })}
                               className="
                                 w-full
+
                                 bg-transparent
+
                                 py-2.5
+
                                 text-[12px]
-                                text-[#103f80]
+                                text-[#F90032]
+
                                 outline-none
-                                placeholder:text-gray-400
+
+                                placeholder:text-[#4B5563]/70
                               "
                             />
                           </div>
@@ -756,7 +902,9 @@ export default function SideEnquiry() {
                           )}
                         </div>
 
-                        {/* SERVER ERROR */}
+                        {/* =================================================
+                            SERVER ERROR
+                        ================================================= */}
 
                         {serverError && (
                           <motion.div
@@ -772,9 +920,12 @@ export default function SideEnquiry() {
                               rounded-lg
                               border
                               border-red-200
+
                               bg-red-50
+
                               px-3
                               py-2
+
                               text-center
                               text-[10px]
                               font-medium
@@ -785,7 +936,9 @@ export default function SideEnquiry() {
                           </motion.div>
                         )}
 
-                        {/* SUBMIT */}
+                        {/* =================================================
+                            SUBMIT
+                        ================================================= */}
 
                         <motion.button
                           type="submit"
@@ -794,7 +947,6 @@ export default function SideEnquiry() {
                             !isSubmitting
                               ? {
                                   y: -2,
-                                  scale: 1.01,
                                 }
                               : undefined
                           }
@@ -807,28 +959,40 @@ export default function SideEnquiry() {
                           }
                           className="
                             group
+                            brand-button
                             relative
+
                             mt-1
+
                             flex
                             w-full
                             items-center
                             justify-center
                             gap-2
+
                             overflow-hidden
+
                             rounded-lg
-                            bg-[#2f65a7]
+
+                            bg-[#FA7000]
+
                             px-4
                             py-2.5
+
                             text-[11px]
                             font-bold
                             uppercase
                             tracking-[0.07em]
                             text-white
-                            shadow-[0_7px_18px_rgba(255,122,0,0.22)]
+
+                            shadow-[0_1px_3px_rgba(17,17,17,0.08)]
+
                             transition-all
                             duration-300
-                            hover:bg-[#4777ae]
-                            hover:shadow-[0_10px_24px_rgba(255,122,0,0.28)]
+
+                            hover:bg-[#F90032]
+                            hover:shadow-[0_4px_12px_rgba(17,17,17,0.08)]
+
                             disabled:cursor-not-allowed
                             disabled:opacity-60
                           "
@@ -839,15 +1003,20 @@ export default function SideEnquiry() {
                                 absolute
                                 -left-full
                                 top-0
+
                                 h-full
                                 w-1/2
+
                                 skew-x-[-25deg]
-                                bg-linear-to-r
+
+                                bg-gradient-to-r
                                 from-transparent
                                 via-white/25
                                 to-transparent
+
                                 transition-all
                                 duration-700
+
                                 group-hover:left-[130%]
                               "
                             />
@@ -864,9 +1033,12 @@ export default function SideEnquiry() {
                               className="
                                 relative
                                 z-10
+
                                 text-[9px]
+
                                 transition-transform
                                 duration-300
+
                                 group-hover:translate-x-1
                               "
                             />
@@ -874,18 +1046,20 @@ export default function SideEnquiry() {
                         </motion.button>
                       </form>
 
-                      {/* QUICK CALL */}
+                      {/* =================================================
+                          QUICK CALL
+                      ================================================= */}
 
                       <div
                         className="
                           mt-3
-                          border-t
-                          border-[#2f65a7]/15
+
                           pt-2.5
+
                           text-center
                         "
                       >
-                        <p className="text-[9px] text-gray-500">
+                        <p className="text-[9px] text-[#4B5563]">
                           Need quick assistance?
                         </p>
 
@@ -893,15 +1067,20 @@ export default function SideEnquiry() {
                           href="tel:+919217104219"
                           className="
                             mt-1
+
                             inline-flex
                             items-center
                             gap-1.5
+
                             text-[12px]
                             font-bold
-                            text-[#103f80]
+
+                            text-[#FA7000]
+
                             transition-all
                             duration-300
-                            hover:text-[#2f65a7]
+
+                            hover:text-[#F90032]
                           "
                         >
                           <FaPhoneAlt className="text-[9px]" />
@@ -936,17 +1115,48 @@ export default function SideEnquiry() {
                       ease: [0.22, 1, 0.36, 1],
                     }}
                     className="
+                      relative
+
                       flex
-                      min-h-100
+                      min-h-[400px]
                       flex-col
                       items-center
                       justify-center
-                      bg-[#ffffff]
+
+                      overflow-hidden
+
+                      bg-white
+
                       px-6
                       py-10
+
                       text-center
                     "
                   >
+                    {/* SUCCESS BACKGROUND GLOW */}
+
+                    <div
+                      className="
+                        pointer-events-none
+                        absolute
+                        left-1/2
+                        top-10
+
+                        h-40
+                        w-40
+
+                        -translate-x-1/2
+
+                        rounded-full
+
+                        bg-[#F8FAFC]
+
+                        blur-3xl
+                      "
+                    />
+
+                    {/* SUCCESS ICON */}
+
                     <motion.div
                       initial={{
                         scale: 0,
@@ -964,15 +1174,21 @@ export default function SideEnquiry() {
                       }}
                       className="
                         relative
+                        z-10
+
                         flex
                         h-16
                         w-16
                         items-center
                         justify-center
+
                         rounded-full
-                        bg-[#2f65a7]
+
+                        bg-[#FA7000]
+
                         text-white
-                        shadow-[0_10px_30px_rgba(255,122,0,0.30)]
+
+                        shadow-[0_4px_12px_rgba(17,17,17,0.08)]
                       "
                     >
                       <FaCheck size={24} />
@@ -993,9 +1209,11 @@ export default function SideEnquiry() {
                         className="
                           absolute
                           inset-0
+
                           rounded-full
+
                           border-2
-                          border-[#2f65a7]
+                          border-[#F90032]
                         "
                       />
                     </motion.div>
@@ -1013,12 +1231,17 @@ export default function SideEnquiry() {
                         delay: 0.25,
                       }}
                       className="
+                        relative
+                        z-10
+
                         mt-5
+
                         text-[9px]
                         font-bold
                         uppercase
                         tracking-[0.22em]
-                        text-[#2f65a7]
+
+                        text-[#F90032]
                       "
                     >
                       Enquiry Submitted
@@ -1037,10 +1260,15 @@ export default function SideEnquiry() {
                         delay: 0.3,
                       }}
                       className="
+                        relative
+                        z-10
+
                         mt-1
+
                         text-[25px]
                         font-extrabold
-                        text-[#103f80]
+
+                        text-[#F90032]
                       "
                     >
                       Thank You!
@@ -1058,10 +1286,16 @@ export default function SideEnquiry() {
                         duration: 0.45,
                       }}
                       className="
+                        relative
+                        z-10
+
                         mt-2
-                        h-0.75
+
+                        h-[3px]
+
                         rounded-full
-                        bg-[#2f65a7]
+
+                        bg-[#F90032]
                       "
                     />
 
@@ -1078,17 +1312,24 @@ export default function SideEnquiry() {
                         delay: 0.4,
                       }}
                       className="
+                        relative
+                        z-10
+
                         mt-4
-                        max-w-67.5
+                        max-w-[270px]
+
                         text-[12px]
                         leading-5
-                        text-gray-500
+
+                        text-[#111111]
                       "
                     >
-                      Your enquiry has been submitted
-                      successfully. Our property consultant
-                      will contact you shortly.
+                      Your enquiry has been submitted successfully.
+                      Our property consultant will contact you
+                      shortly.
                     </motion.p>
+
+                    {/* DONE BUTTON */}
 
                     <motion.button
                       type="button"
@@ -1106,34 +1347,47 @@ export default function SideEnquiry() {
                       }}
                       whileHover={{
                         y: -2,
-                        scale: 1.02,
                       }}
                       whileTap={{
                         scale: 0.97,
                       }}
                       className="
                         group
+                        brand-button
                         relative
+                        z-10
+
                         mt-6
+
                         flex
-                        min-w-35
+                        min-w-[140px]
                         items-center
                         justify-center
                         gap-2
+
                         overflow-hidden
+
                         rounded-lg
-                        bg-[#2f65a7]
+
+                        bg-[#FA7000]
+
                         px-7
                         py-2.5
+
                         text-[11px]
                         font-bold
                         uppercase
                         tracking-[0.08em]
+
                         text-white
-                        shadow-[0_8px_20px_rgba(255,122,0,0.25)]
+
+                        shadow-[0_1px_3px_rgba(17,17,17,0.08)]
+
                         transition-all
                         duration-300
-                        hover:bg-[#4777ae]
+
+                        hover:bg-[#F90032]
+                        hover:shadow-[0_4px_12px_rgba(17,17,17,0.08)]
                       "
                     >
                       <span
@@ -1141,15 +1395,20 @@ export default function SideEnquiry() {
                           absolute
                           -left-full
                           top-0
+
                           h-full
                           w-1/2
+
                           skew-x-[-25deg]
-                          bg-linear-to-r
+
+                          bg-gradient-to-r
                           from-transparent
                           via-white/25
                           to-transparent
+
                           transition-all
                           duration-700
+
                           group-hover:left-[130%]
                         "
                       />
@@ -1162,13 +1421,18 @@ export default function SideEnquiry() {
                         className="
                           relative
                           z-10
+
                           text-[9px]
+
                           transition-transform
                           duration-300
+
                           group-hover:translate-x-1
                         "
                       />
                     </motion.button>
+
+                    {/* IMMEDIATE ASSISTANCE */}
 
                     <motion.div
                       initial={{
@@ -1181,14 +1445,20 @@ export default function SideEnquiry() {
                         delay: 0.55,
                       }}
                       className="
+                        relative
+                        z-10
+
                         mt-6
+
                         w-full
+
                         border-t
-                        border-[#2f65a7]/15
+                        border-[#E5E7EB]
+
                         pt-4
                       "
                     >
-                      <p className="text-[9px] text-gray-500">
+                      <p className="text-[9px] text-[#4B5563]">
                         Need immediate assistance?
                       </p>
 
@@ -1196,15 +1466,20 @@ export default function SideEnquiry() {
                         href="tel:+919217104219"
                         className="
                           mt-1
+
                           inline-flex
                           items-center
                           gap-1.5
+
                           text-[12px]
                           font-bold
-                          text-[#103f80]
+
+                          text-[#FA7000]
+
                           transition-all
                           duration-300
-                          hover:text-[#2f65a7]
+
+                          hover:text-[#F90032]
                         "
                       >
                         <FaPhoneAlt className="text-[9px]" />
@@ -1221,5 +1496,3 @@ export default function SideEnquiry() {
     </>
   );
 }
-
-

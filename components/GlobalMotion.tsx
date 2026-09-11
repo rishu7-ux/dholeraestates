@@ -15,11 +15,11 @@ export default function GlobalMotion() {
     ];
     const elements: HTMLElement[] = [];
     selectors.forEach((selector) => document.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
-      if (element.dataset.globalMotion) return;
-      element.dataset.globalMotion = "true";
-      element.classList.add("global-reveal");
-      element.style.setProperty("--global-delay", `${Math.min((index % 4) * 90, 270)}ms`);
-      elements.push(element);
+        if (element.dataset.globalMotion) return;
+        element.dataset.globalMotion = "true";
+        element.classList.add("global-reveal");
+        element.style.setProperty("--global-delay", `${Math.min((index % 4) * 90, 270)}ms`);
+        elements.push(element);
     }));
     const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
       if (entry.isIntersecting) { entry.target.classList.add("global-visible"); observer.unobserve(entry.target); }

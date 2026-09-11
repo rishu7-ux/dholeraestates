@@ -1,18 +1,57 @@
-import Link from "next/link";
-import SiteFrame from "@/components/SiteFrame";
-import AnimatedPropertySections from "@/components/AnimatedPropertySections";
-import BlogSection from "@/components/BlogSection";
+import type { Metadata } from "next";
 
-const features = ["Residential plot options", "Project and document guidance", "Site-visit coordination", "Multiple plot sizes"];
-const amenities = [["Gated Planning", "Planned entrances and residential community access."], ["Green Spaces", "Green belts and tree-lined areas included in the promoted plan."], ["Community Areas", "Spaces proposed for community and multipurpose use."], ["Everyday Convenience", "Shops and daily-needs facilities planned within the wider development."]];
-const testimonials = [["Rajeev Malhotra", "The team supported us throughout the process and explained the residential plot options clearly."], ["Rakesh Jain", "The guidance made our property enquiry and plot-selection process straightforward."], ["Sudha Sharma", "We appreciated the responsive communication and help with understanding the next steps."]];
-export default function Home() { return <SiteFrame><main>
-  <section className="hero" style={{backgroundImage:"linear-gradient(90deg, #171412e8 0%, #111111cb 48%, #103f805c), url('/images/p1.jpg')"}}><div className="hero-overlay"/><div className="shell hero-grid hero-grid-single"><div className="hero-copy"><span className="eyebrow light-text">Welcome to Dholera Estates</span><h1>Own a Residential Plot in the Dholera Growth Region</h1><p>Explore Dholera Estate residential plot options with clear project information, buyer support and guided site visits.</p><div className="actions"><Link href="/properties" className="btn">View Properties</Link><Link href="/contact-us" className="btn ghost">Book Site Visit</Link></div></div></div></section>
-  <section id="about" className="section"><div className="shell split"><div className="image-card source-about" style={{backgroundImage:"url('/images/12.jpg')"}} role="img" aria-label="Residential development in Dholera"/><div><span className="eyebrow">Who we are</span><h2>Building Dreams, One Plot at a Time</h2><p>Dholera Estates was established in 2024 to help buyers explore strategic land and residential plot opportunities connected to the wider Dholera development region.</p><p>Our team supports buyers with project information, plot selection, documentation guidance and site-visit coordination. All decisions should follow independent legal and financial due diligence.</p><div className="tick-grid">{features.map(x => <span key={x}>✓ {x}</span>)}</div><Link href="/contact-us" className="text-link">Speak with our team →</Link></div></div></section>
-  <AnimatedPropertySections />
-  <section className="section lifestyle-section"><div className="lifestyle-orb lifestyle-orb-one"/><div className="lifestyle-orb lifestyle-orb-two"/><div className="shell lifestyle-content"><div className="lifestyle-heading"><div><span className="eyebrow">Project lifestyle</span><h2>Designed Around the Way You Live</h2></div><p className="section-intro">Thoughtfully planned spaces bring security, greenery, community and everyday convenience together in one connected neighbourhood.</p></div><div className="info-grid lifestyle-grid">{amenities.map(([title,text],i)=><article className="info-card lifestyle-card" key={title}><div className="lifestyle-card-top"><span className="lifestyle-icon" aria-hidden="true"><i/></span><b>0{i+1}</b></div><h3>{title}</h3><p>{text}</p><span className="lifestyle-arrow" aria-hidden="true">↗</span></article>)}</div></div></section>
-  <section className="section pale testimonial-section"><div className="shell"><span className="eyebrow">Our testimonials</span><h2>What Clients Say</h2></div><div className="testimonial-marquee"><div className="testimonial-track">{testimonials.map(([name,quote])=><blockquote key={`first-${name}`}><div className="stars">★★★★★</div><p>“{quote}”</p><cite>{name}</cite></blockquote>)}{testimonials.map(([name,quote])=><blockquote aria-hidden="true" key={`second-${name}`}><div className="stars">★★★★★</div><p>“{quote}”</p><cite>{name}</cite></blockquote>)}</div></div><p className="disclaimer shell">Testimonials are adapted from statements published on the supplied Dholera Estates website.</p></section>
-  <section className="section location"><div className="shell split"><div><span className="eyebrow light-text">Location & connectivity</span><h2>Connected to the Wider Dholera Region</h2><p>The project material highlights access to Ahmedabad, the Ahmedabad–Dholera Expressway corridor, the developing Dholera International Airport and the wider DMIC growth region.</p><Link href="/contact-us" className="btn">Request Location Details</Link></div><div className="location-points"><span>Ahmedabad connectivity</span><span>Dholera airport region</span><span>Expressway corridor</span><span>Industrial growth region</span></div></div></section>
-  <BlogSection />
-  <section className="section"><div className="shell center"><span className="eyebrow">Start your property journey</span><h2>Plan a Dholera Site Visit</h2><p>Talk with our team about current plot availability, pricing and the project location.</p><Link href="/contact-us" className="btn">Contact Us Today</Link></div></section>
-</main></SiteFrame>; }
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import PopupForm from "@/components/PopupForm";
+import SideEnquiry from "@/components/SideEnquiry";
+import PropertyIntro from "@/components/PropertyType";
+import PropertyCategories from "@/components/PropertyCategories";
+import InfrastructureHighlights from "@/components/InfrastructureHighlights";
+import Testimonial from "@/components/Testimonial";
+import Blogsection from "@/components/BlogSection";
+import Footer from "@/components/Footer";
+import { getBlogs } from "@/lib/blogs";
+
+const title = "Dholera Estates | Residential Plots in Akru, Dholera";
+const description =
+  "Explore Dholera Estates residential plots in Akru village near Dholera SIR, with site visits, project information and buyer support.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title,
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title,
+    description,
+  },
+};
+
+
+export default async function Home() {
+  const blogs = await getBlogs();
+  return (
+   <>
+
+      <Header />
+      <Hero />
+      <SideEnquiry />
+      <PopupForm />
+      <PropertyIntro/>
+      <PropertyCategories />
+      <InfrastructureHighlights />
+      <Testimonial/>
+      <Blogsection blogs={blogs}/>
+      <Footer/>
+
+
+    </>
+  );
+}

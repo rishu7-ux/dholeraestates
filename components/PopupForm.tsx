@@ -25,10 +25,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 /* =========================================================
-   GLOBAL FLAG
-========================================================= */
-
-/* =========================================================
    PROPS
 ========================================================= */
 
@@ -73,33 +69,26 @@ type FormData = z.infer<typeof formSchema>;
 ========================================================= */
 
 export default function PopupForm({
-  open = false,
+  open,
   onClose,
   propertyName = "Dholera Estates",
 }: PopupFormProps) {
   const [autoOpen, setAutoOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState("");
 
-  const [submitted, setSubmitted] =
-    useState(false);
-
-  const [serverError, setServerError] =
-    useState("");
-
-  const modalOpen =
-    open || autoOpen;
+  const modalOpen = open ?? autoOpen;
 
   const {
     register,
     handleSubmit,
     reset,
-
     formState: {
       errors,
       isSubmitting,
     },
   } = useForm<FormData>({
-    resolver:
-      zodResolver(formSchema),
+    resolver: zodResolver(formSchema),
 
     defaultValues: {
       name: "",
@@ -108,68 +97,52 @@ export default function PopupForm({
     },
 
     mode: "onSubmit",
-
-    reValidateMode:
-      "onChange",
+    reValidateMode: "onChange",
   });
 
   /* =========================================================
-     AUTO OPEN AFTER EVERY PAGE LOAD
+     AUTO OPEN EVERY PAGE LOAD
   ========================================================= */
 
   useEffect(() => {
-    const timer =
-      window.setTimeout(() => {
-        setAutoOpen(true);
-      }, 1200);
+    if (open !== undefined) return;
+    const timer = window.setTimeout(() => {
+      setAutoOpen(true);
+    }, 1000);
 
     return () => {
       window.clearTimeout(timer);
     };
-  }, []);
+  }, [open]);
 
   /* =========================================================
      CLOSE
   ========================================================= */
 
-  const handleClose =
-    useCallback(() => {
-      setAutoOpen(false);
+  const handleClose = useCallback(() => {
+    setAutoOpen(false);
+    setServerError("");
 
-      setServerError("");
+    onClose?.();
 
-      onClose?.();
-
-      setTimeout(() => {
-        reset();
-
-        setSubmitted(false);
-      }, 250);
-    }, [
-      reset,
-      onClose,
-    ]);
+    window.setTimeout(() => {
+      reset();
+      setSubmitted(false);
+    }, 250);
+  }, [reset, onClose]);
 
   /* =========================================================
-     ESC CLOSE
+     ESCAPE CLOSE
   ========================================================= */
 
   useEffect(() => {
-    const handleEscape = (
-      event: KeyboardEvent
-    ) => {
-      if (
-        event.key === "Escape" &&
-        modalOpen
-      ) {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && modalOpen) {
         handleClose();
       }
     };
 
-    window.addEventListener(
-      "keydown",
-      handleEscape
-    );
+    window.addEventListener("keydown", handleEscape);
 
     return () => {
       window.removeEventListener(
@@ -177,10 +150,7 @@ export default function PopupForm({
         handleEscape
       );
     };
-  }, [
-    modalOpen,
-    handleClose,
-  ]);
+  }, [modalOpen, handleClose]);
 
   /* =========================================================
      BODY SCROLL LOCK
@@ -188,42 +158,23 @@ export default function PopupForm({
 
   useEffect(() => {
     if (modalOpen) {
-      document.body.style.overflow =
-        "hidden";
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow =
-        "";
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow =
-        "";
+      document.body.style.overflow = "";
     };
   }, [modalOpen]);
 
   /* =========================================================
-     SUBMIT → API → PAYLOAD → MONGODB
+     SUBMIT
   ========================================================= */
 
-  const onSubmit = async (
-    data: FormData
-  ) => {
+  const onSubmit = async (data: FormData) => {
     try {
       setServerError("");
-
-      console.log(
-        "Submitting popup enquiry:",
-        {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          property: propertyName,
-        }
-      );
-
-      /* =============================================
-         POPUP → ENQUIRY API
-      ============================================= */
 
       const response = await fetch(
         "/api/enquiries",
@@ -231,8 +182,7 @@ export default function PopupForm({
           method: "POST",
 
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
 
           body: JSON.stringify({
@@ -255,60 +205,18 @@ export default function PopupForm({
         }
       );
 
-      /* =============================================
-         READ API RESPONSE
-      ============================================= */
-
-      const result =
-        await response.json();
-
-      console.log(
-        "Popup API Response:",
-        result
-      );
-
-      /* =============================================
-         CHECK API RESPONSE
-      ============================================= */
+      const result = await response.json();
 
       if (!response.ok) {
-        console.error(
-          "❌ Enquiry API Error:",
-          result
-        );
-
         throw new Error(
           result?.message ||
             "Failed to save enquiry"
         );
       }
 
-      /* =============================================
-         SUCCESS
-      ============================================= */
-
-      console.log(
-        "✅ Popup enquiry saved to Payload:",
-        result
-      );
-
-      /* =============================================
-         RESET FORM
-      ============================================= */
-
       reset();
-
-      /* =============================================
-         SHOW THANK YOU SCREEN
-      ============================================= */
-
       setSubmitted(true);
     } catch (error) {
-      console.error(
-        "❌ Popup enquiry submit error:",
-        error
-      );
-
       const message =
         error instanceof Error
           ? error.message
@@ -334,9 +242,7 @@ export default function PopupForm({
           transition={{
             duration: 0.25,
           }}
-          onClick={
-            handleClose
-          }
+          onClick={handleClose}
           className="
             fixed
             inset-0
@@ -348,10 +254,10 @@ export default function PopupForm({
 
             overflow-y-auto
 
-            bg-[#103f80]/70
+            bg-[#111111]/70
 
-            px-4
-            py-4
+            px-5
+            py-5
 
             backdrop-blur-sm
           "
@@ -378,61 +284,75 @@ export default function PopupForm({
             }}
             transition={{
               duration: 0.4,
-
-              ease: [
-                0.22,
-                1,
-                0.36,
-                1,
-              ],
+              ease: [0.22, 1, 0.36, 1],
             }}
-            onClick={(
-              event
-            ) => {
+            onClick={(event) => {
               event.stopPropagation();
             }}
             className="
               relative
+              enquiry-premium
 
               max-h-[94vh]
 
               w-full
-              max-w-87.5
+              max-w-90
 
               overflow-x-hidden
               overflow-y-auto
 
-              rounded-[22px]
+              rounded-3xl
 
               border
-              border-[#2f65a7]/20
+              border-[#E5E7EB]
 
-              bg-[#f1f5f9]
+              bg-[#F8FAFC]
 
-              shadow-[0_22px_65px_rgba(8,26,58,0.30)]
+              shadow-[0_10px_28px_rgba(17,17,17,0.08)]
 
-              sm:max-w-107.5
               sm:rounded-[28px]
+              sm:max-w-107.5
             "
           >
+            {/* =================================================
+                DECORATIVE GLOW
+            ================================================= */}
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                -right-16
+                -top-16
+
+                h-40
+                w-40
+
+                rounded-full
+
+                bg-transparent
+
+                blur-3xl
+              "
+            />
+
             {/* =================================================
                 CLOSE BUTTON
             ================================================= */}
 
             <motion.button
               type="button"
-              onClick={
-                handleClose
-              }
+              onClick={handleClose}
               aria-label="Close popup"
               whileHover={{
                 rotate: 90,
-                scale: 1.08,
+                y: -2,
               }}
               whileTap={{
-                scale: 0.9,
+                y: 0,
               }}
               className="
+                brand-icon-button
                 absolute
                 right-3
                 top-3
@@ -448,19 +368,19 @@ export default function PopupForm({
                 rounded-full
 
                 border
-                border-[#2f65a7]/20
+                border-[#E5E7EB]
 
                 bg-white
 
-                text-[#103f80]
+                text-[#FA7000]
 
                 shadow-sm
 
                 transition-all
                 duration-300
 
-                hover:border-[#2f65a7]
-                hover:bg-[#2f65a7]
+                hover:border-[#F90032]
+                hover:bg-[#F90032]
                 hover:text-white
 
                 sm:right-4
@@ -469,9 +389,7 @@ export default function PopupForm({
                 sm:w-9
               "
             >
-              <FaTimes
-                size={13}
-              />
+              <FaTimes size={13} />
             </motion.button>
 
             <AnimatePresence mode="wait">
@@ -505,11 +423,11 @@ export default function PopupForm({
                       relative
 
                       border-b
-                      border-[#2f65a7]/10
+                      border-[#E5E7EB]
 
                       bg-linear-to-b
-                      from-[#f8fafc]
-                      to-[#e7edf4]
+                      from-[#F8FAFC]
+                      to-[#F8FAFC]
 
                       px-5
                       pb-4
@@ -522,8 +440,6 @@ export default function PopupForm({
                       sm:pt-7
                     "
                   >
-                    {/* BADGE */}
-
                     <motion.div
                       initial={{
                         opacity: 0,
@@ -548,9 +464,9 @@ export default function PopupForm({
                         rounded-full
 
                         border
-                        border-[#2f65a7]/20
+                        border-[#E5E7EB]
 
-                        bg-white/70
+                        bg-white/75
 
                         px-3
                         py-1
@@ -560,7 +476,7 @@ export default function PopupForm({
                         uppercase
                         tracking-[0.15em]
 
-                        text-[#2f65a7]
+                        text-[#FA7000]
 
                         sm:text-[10px]
                       "
@@ -569,8 +485,6 @@ export default function PopupForm({
 
                       Property Enquiry
                     </motion.div>
-
-                    {/* TITLE */}
 
                     <motion.h2
                       initial={{
@@ -590,15 +504,13 @@ export default function PopupForm({
                         text-[23px]
                         font-extrabold
 
-                        text-[#103f80]
+                        text-[#F90032]
 
                         sm:text-3xl
                       "
                     >
                       Enquire Now
                     </motion.h2>
-
-                    {/* LINE */}
 
                     <motion.div
                       initial={{
@@ -619,11 +531,9 @@ export default function PopupForm({
 
                         rounded-full
 
-                        bg-[#2f65a7]
+                        bg-[#F90032]
                       "
                     />
-
-                    {/* DESCRIPTION */}
 
                     <p
                       className="
@@ -637,16 +547,15 @@ export default function PopupForm({
                         text-[11px]
                         leading-5
 
-                        text-gray-600
+                        text-[#4B5563]
 
                         sm:mt-3
                         sm:text-[13px]
                         sm:leading-6
                       "
                     >
-                      Share your details and our
-                      property consultant will contact
-                      you shortly.
+                      Share your details and our property
+                      consultant will contact you shortly.
                     </p>
 
                     {/* PROPERTY */}
@@ -658,9 +567,9 @@ export default function PopupForm({
                         rounded-xl
 
                         border
-                        border-[#2f65a7]/15
+                        border-[#E5E7EB]
 
-                        bg-white/60
+                        bg-white/65
 
                         px-3
                         py-2
@@ -677,7 +586,7 @@ export default function PopupForm({
                           uppercase
                           tracking-[0.15em]
 
-                          text-gray-400
+                          text-[#4B5563]/60
 
                           sm:text-[9px]
                         "
@@ -692,7 +601,7 @@ export default function PopupForm({
                           text-[12px]
                           font-bold
 
-                          text-[#103f80]
+                          text-[#F90032]
 
                           sm:text-[13px]
                         "
@@ -709,8 +618,8 @@ export default function PopupForm({
                   <div
                     className="
                       bg-linear-to-b
-                      from-[#f8fafc]
-                      to-[#e7edf4]
+                      from-[#F8FAFC]
+                      to-[#F8FAFC]
 
                       px-5
                       pb-5
@@ -722,11 +631,7 @@ export default function PopupForm({
                     "
                   >
                     <form
-                      onSubmit={
-                        handleSubmit(
-                          onSubmit
-                        )
-                      }
+                      onSubmit={handleSubmit(onSubmit)}
                       noValidate
                       className="
                         space-y-3
@@ -758,10 +663,10 @@ export default function PopupForm({
                             ${
                               errors.name
                                 ? "border-red-500 bg-red-50/20"
-                                : "border-[#2f65a7]/20 focus-within:border-[#2f65a7]"
+                                : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                             }
 
-                            focus-within:shadow-[0_6px_20px_rgba(255,122,0,0.10)]
+                            focus-within:shadow-[0_1px_3px_rgba(17,17,17,0.08)]
 
                             sm:px-4
                           `}
@@ -770,16 +675,14 @@ export default function PopupForm({
                             className={
                               errors.name
                                 ? "text-sm text-red-500"
-                                : "text-sm text-[#2f65a7]"
+                                : "text-sm text-[#FA7000]"
                             }
                           />
 
                           <input
                             type="text"
                             placeholder="Your Name*"
-                            {...register(
-                              "name"
-                            )}
+                            {...register("name")}
                             className="
                               w-full
 
@@ -788,11 +691,11 @@ export default function PopupForm({
                               py-2.5
 
                               text-sm
-                              text-[#103f80]
+                              text-[#111111]
 
                               outline-none
 
-                              placeholder:text-gray-400
+                              placeholder:text-[#4B5563]/70
 
                               sm:py-3.5
                             "
@@ -824,11 +727,7 @@ export default function PopupForm({
                                 sm:text-[11px]
                               "
                             >
-                              {
-                                errors
-                                  .name
-                                  .message
-                              }
+                              {errors.name.message}
                             </motion.p>
                           )}
                         </AnimatePresence>
@@ -859,10 +758,10 @@ export default function PopupForm({
                             ${
                               errors.email
                                 ? "border-red-500 bg-red-50/20"
-                                : "border-[#2f65a7]/20 focus-within:border-[#2f65a7]"
+                                : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                             }
 
-                            focus-within:shadow-[0_6px_20px_rgba(255,122,0,0.10)]
+                            focus-within:shadow-[0_1px_3px_rgba(17,17,17,0.08)]
 
                             sm:px-4
                           `}
@@ -871,16 +770,14 @@ export default function PopupForm({
                             className={
                               errors.email
                                 ? "text-sm text-red-500"
-                                : "text-sm text-[#2f65a7]"
+                                : "text-sm text-[#FA7000]"
                             }
                           />
 
                           <input
                             type="email"
                             placeholder="Your Email*"
-                            {...register(
-                              "email"
-                            )}
+                            {...register("email")}
                             className="
                               w-full
 
@@ -889,11 +786,11 @@ export default function PopupForm({
                               py-2.5
 
                               text-sm
-                              text-[#103f80]
+                              text-[#111111]
 
                               outline-none
 
-                              placeholder:text-gray-400
+                              placeholder:text-[#4B5563]/70
 
                               sm:py-3.5
                             "
@@ -925,11 +822,7 @@ export default function PopupForm({
                                 sm:text-[11px]
                               "
                             >
-                              {
-                                errors
-                                  .email
-                                  .message
-                              }
+                              {errors.email.message}
                             </motion.p>
                           )}
                         </AnimatePresence>
@@ -957,10 +850,10 @@ export default function PopupForm({
                             ${
                               errors.phone
                                 ? "border-red-500 bg-red-50/20"
-                                : "border-[#2f65a7]/20 focus-within:border-[#2f65a7]"
+                                : "border-[#E5E7EB] focus-within:border-[#FA7000]"
                             }
 
-                            focus-within:shadow-[0_6px_20px_rgba(255,122,0,0.10)]
+                            focus-within:shadow-[0_1px_3px_rgba(17,17,17,0.08)]
                           `}
                         >
                           <span
@@ -974,28 +867,26 @@ export default function PopupForm({
                               items-center
                               justify-center
 
-                              text-[#2f65a7]
+                              text-[#FA7000]
 
                               sm:h-12
                               sm:w-12
                             "
                           >
-                            <FaPhoneAlt
-                              size={13}
-                            />
+                            <FaPhoneAlt size={13} />
                           </span>
 
                           <span
                             className="
                               border-r
-                              border-[#2f65a7]/15
+                              border-[#E5E7EB]
 
                               pr-2
 
                               text-xs
                               font-bold
 
-                              text-gray-500
+                              text-[#111111]
 
                               sm:pr-3
                               sm:text-sm
@@ -1009,26 +900,14 @@ export default function PopupForm({
                             inputMode="numeric"
                             maxLength={10}
                             placeholder="9876543210"
-                            {...register(
-                              "phone",
-                              {
-                                onChange:
-                                  (
-                                    event
-                                  ) => {
-                                    event.target.value =
-                                      event.target.value
-                                        .replace(
-                                          /\D/g,
-                                          ""
-                                        )
-                                        .slice(
-                                          0,
-                                          10
-                                        );
-                                  },
-                              }
-                            )}
+                            {...register("phone", {
+                              onChange: (event) => {
+                                event.target.value =
+                                  event.target.value
+                                    .replace(/\D/g, "")
+                                    .slice(0, 10);
+                              },
+                            })}
                             className="
                               min-w-0
                               w-full
@@ -1039,11 +918,11 @@ export default function PopupForm({
                               py-2.5
 
                               text-sm
-                              text-[#103f80]
+                              text-[#111111]
 
                               outline-none
 
-                              placeholder:text-gray-400
+                              placeholder:text-[#4B5563]/70
 
                               sm:px-3
                               sm:py-3.5
@@ -1076,11 +955,7 @@ export default function PopupForm({
                                 sm:text-[11px]
                               "
                             >
-                              {
-                                errors
-                                  .phone
-                                  .message
-                              }
+                              {errors.phone.message}
                             </motion.p>
                           )}
                         </AnimatePresence>
@@ -1102,12 +977,17 @@ export default function PopupForm({
                           }}
                           className="
                             rounded-lg
+
                             border
                             border-red-200
+
                             bg-red-50
+
                             px-3
                             py-2
+
                             text-center
+
                             text-[11px]
                             font-medium
                             text-red-600
@@ -1118,20 +998,17 @@ export default function PopupForm({
                       )}
 
                       {/* =========================================
-                          SUBMIT
+                          SUBMIT BUTTON
                       ========================================= */}
 
                       <motion.button
                         type="submit"
-                        disabled={
-                          isSubmitting
-                        }
+                        disabled={isSubmitting}
                         whileHover={
                           isSubmitting
                             ? undefined
                             : {
                                 y: -2,
-                                scale: 1.01,
                               }
                         }
                         whileTap={
@@ -1143,6 +1020,7 @@ export default function PopupForm({
                         }
                         className="
                           group
+                          brand-button
                           relative
 
                           flex
@@ -1155,7 +1033,7 @@ export default function PopupForm({
 
                           rounded-xl
 
-                          bg-[#2f65a7]
+                          bg-[#FA7000]
 
                           px-5
                           py-3
@@ -1167,13 +1045,13 @@ export default function PopupForm({
 
                           text-white
 
-                          shadow-[0_10px_25px_rgba(255,122,0,0.25)]
+                          shadow-[0_4px_12px_rgba(17,17,17,0.08)]
 
                           transition-all
                           duration-300
 
-                          hover:bg-[#4777ae]
-                          hover:shadow-[0_14px_30px_rgba(255,122,0,0.30)]
+                          hover:bg-[#F90032]
+                          hover:shadow-[0_4px_12px_rgba(17,17,17,0.08)]
 
                           disabled:cursor-not-allowed
                           disabled:opacity-60
@@ -1243,7 +1121,7 @@ export default function PopupForm({
                         mt-4
 
                         border-t
-                        border-[#2f65a7]/15
+                        border-[#E5E7EB]
 
                         pt-4
 
@@ -1254,7 +1132,8 @@ export default function PopupForm({
                         className="
                           text-[10px]
                           font-medium
-                          text-gray-500
+
+                          text-[#4B5563]
 
                           sm:text-[11px]
                         "
@@ -1274,19 +1153,17 @@ export default function PopupForm({
                           text-[13px]
                           font-bold
 
-                          text-[#103f80]
+                          text-[#FA7000]
 
                           transition-all
                           duration-300
 
-                          hover:text-[#2f65a7]
+                          hover:text-[#F90032]
 
                           sm:text-sm
                         "
                       >
-                        <FaPhoneAlt
-                          size={11}
-                        />
+                        <FaPhoneAlt size={11} />
 
                         +91 92171 04219
                       </a>
@@ -1316,24 +1193,18 @@ export default function PopupForm({
                   }}
                   transition={{
                     duration: 0.45,
-
-                    ease: [
-                      0.22,
-                      1,
-                      0.36,
-                      1,
-                    ],
+                    ease: [0.22, 1, 0.36, 1],
                   }}
                   className="
                     flex
-                    min-h-105
+                    min-h-[420px]
                     flex-col
                     items-center
                     justify-center
 
-                    bg-linear-to-b
-                    from-[#f8fafc]
-                    to-[#e7edf4]
+                    bg-gradient-to-b
+                    from-[#F8FAFC]
+                    to-[#F8FAFC]
 
                     px-6
                     py-10
@@ -1369,16 +1240,14 @@ export default function PopupForm({
 
                       rounded-full
 
-                      bg-[#2f65a7]
+                      bg-[#FA7000]
 
                       text-white
 
-                      shadow-[0_10px_30px_rgba(255,122,0,0.30)]
+                      shadow-[0_4px_12px_rgba(17,17,17,0.08)]
                     "
                   >
-                    <FaCheckCircle
-                      size={28}
-                    />
+                    <FaCheckCircle size={28} />
 
                     <motion.span
                       initial={{
@@ -1400,7 +1269,7 @@ export default function PopupForm({
                         rounded-full
 
                         border-2
-                        border-[#2f65a7]
+                        border-[#F90032]
                       "
                     />
                   </motion.div>
@@ -1427,7 +1296,7 @@ export default function PopupForm({
                       uppercase
                       tracking-[0.2em]
 
-                      text-[#2f65a7]
+                      text-[#F90032]
                     "
                   >
                     Enquiry Submitted
@@ -1453,7 +1322,7 @@ export default function PopupForm({
                       text-[26px]
                       font-extrabold
 
-                      text-[#103f80]
+                      text-[#F90032]
 
                       sm:text-[30px]
                     "
@@ -1477,11 +1346,11 @@ export default function PopupForm({
                     className="
                       mt-2
 
-                      h-0.75
+                      h-[3px]
 
                       rounded-full
 
-                      bg-[#2f65a7]
+                      bg-[#F90032]
                     "
                   />
 
@@ -1503,12 +1372,12 @@ export default function PopupForm({
                       mx-auto
                       mt-4
 
-                      max-w-70
+                      max-w-[280px]
 
                       text-[12px]
                       leading-5
 
-                      text-gray-600
+                      text-[#111111]
 
                       sm:text-[13px]
                       sm:leading-6
@@ -1518,13 +1387,11 @@ export default function PopupForm({
                     Our property consultant will contact you shortly.
                   </motion.p>
 
-                  {/* DONE */}
+                  {/* DONE BUTTON */}
 
                   <motion.button
                     type="button"
-                    onClick={
-                      handleClose
-                    }
+                    onClick={handleClose}
                     initial={{
                       opacity: 0,
                       y: 10,
@@ -1538,19 +1405,19 @@ export default function PopupForm({
                     }}
                     whileHover={{
                       y: -2,
-                      scale: 1.02,
                     }}
                     whileTap={{
                       scale: 0.97,
                     }}
                     className="
                       group
+                      brand-button
                       relative
 
                       mt-6
 
                       flex
-                      min-w-36.25
+                      min-w-[145px]
                       items-center
                       justify-center
                       gap-2
@@ -1559,7 +1426,7 @@ export default function PopupForm({
 
                       rounded-xl
 
-                      bg-[#2f65a7]
+                      bg-[#FA7000]
 
                       px-7
                       py-3
@@ -1571,12 +1438,12 @@ export default function PopupForm({
 
                       text-white
 
-                      shadow-[0_8px_22px_rgba(255,122,0,0.25)]
+                      shadow-[0_4px_12px_rgba(17,17,17,0.08)]
 
                       transition-all
                       duration-300
 
-                      hover:bg-[#4777ae]
+                      hover:bg-[#F90032]
                     "
                   >
                     <span
@@ -1590,7 +1457,7 @@ export default function PopupForm({
 
                         skew-x-[-25deg]
 
-                        bg-linear-to-r
+                        bg-gradient-to-r
                         from-transparent
                         via-white/25
                         to-transparent
@@ -1639,12 +1506,12 @@ export default function PopupForm({
                       w-full
 
                       border-t
-                      border-[#2f65a7]/15
+                      border-[#E5E7EB]
 
                       pt-4
                     "
                   >
-                    <p className="text-[10px] text-gray-500">
+                    <p className="text-[10px] text-[#4B5563]">
                       Need quick assistance?
                     </p>
 
@@ -1660,17 +1527,15 @@ export default function PopupForm({
                         text-[13px]
                         font-bold
 
-                        text-[#103f80]
+                        text-[#FA7000]
 
                         transition-all
                         duration-300
 
-                        hover:text-[#2f65a7]
+                        hover:text-[#F90032]
                       "
                     >
-                      <FaPhoneAlt
-                        size={11}
-                      />
+                      <FaPhoneAlt size={11} />
 
                       +91 92171 04219
                     </a>
@@ -1684,5 +1549,3 @@ export default function PopupForm({
     </AnimatePresence>
   );
 }
-
-
