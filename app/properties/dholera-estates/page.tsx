@@ -704,6 +704,28 @@ export default function PropertyDetailPage() {
                 />
                 <BulletCards items={importantConsiderations} />
               </section>
+              <section className="mt-16">
+                <SectionHeading
+                  title="Project Layout"
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  className="overflow-hidden rounded-[28px] border border-[#E5E7EB] bg-white shadow-[0_10px_28px_rgba(17,17,17,0.08)]"
+                >
+                  <div className="relative aspect-video w-full overflow-hidden bg-white">
+                    <Image
+                      src="/images/projectlayout.jpeg"
+                      alt="Dholera Estates project layout"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 900px"
+                      className="object-contain object-center"
+                    />
+                  </div>
+                </motion.div>
+              </section>
               <motion.section
                 initial={{
                   opacity: 0,

@@ -24,7 +24,7 @@ export default function InfrastructureHighlights() {
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.25 }} transition={{ duration: 0.6 }} className="mx-auto max-w-3xl text-center">
           <div className="flex items-center justify-center gap-3"><span className="h-0.5 w-10 rounded-full bg-[#FA7000]" /><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#111111]">Regional Infrastructure</p><span className="h-0.5 w-10 rounded-full bg-[#FA7000]" /></div>
           <h2 className="mt-4 text-3xl font-extrabold leading-tight text-[#101827] sm:text-4xl md:text-5xl">Growth Drivers Around the <span className="brand-gradient-text inline-block">Dholera Region</span></h2>
-          <p className="mx-auto mt-5 max-w-3xl text-base leading-7 text-[#4b5563] sm:text-lg">Major transport, industry and clean-energy initiatives are shaping connectivity and long-term development across the wider region.</p>
+          <p className="mx-auto mt-6 max-w-3xl text-[15px] font-semibold leading-7 text-[#25324a] sm:text-lg sm:leading-8">Major transport, industry and clean-energy initiatives are shaping connectivity and long-term development across the wider region.</p>
         </motion.div>
 
         <div className="relative z-10 mx-auto mt-10 grid max-w-7xl gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
