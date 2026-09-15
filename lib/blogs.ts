@@ -6,6 +6,7 @@ export type Blog = {
   slug: string;
   excerpt: string;
   content: string;
+  richContentHtml?: string | null;
   publishedAt: string;
   imageUrl: string | null;
   imageAlt: string;
@@ -67,6 +68,7 @@ function normalizeBlog(record: CmsRecord): Blog | null {
     slug,
     excerpt: text(record.shortDescription ?? record.excerpt),
     content: richText(record.blogContent ?? record.content),
+    richContentHtml: richContentHtml(record.richContentHtml),
     publishedAt: text(record.publishedAt ?? record.updatedAt ?? record.createdAt)
       || new Date(0).toISOString(),
     imageUrl,
@@ -86,6 +88,19 @@ function richText(value: unknown): string {
 
   if (typeof value.text === "string") return value.text;
   return richText(value.root ?? value.children);
+}
+
+function richContentHtml(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+
+  const html = value.trim();
+  if (!html) return null;
+
+  const hasVisibleContent =
+    html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim().length > 0 ||
+    /<(img|hr|iframe|video)\b/i.test(html);
+
+  return hasVisibleContent ? html : null;
 }
 
 function text(value: unknown): string {
