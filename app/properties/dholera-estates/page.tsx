@@ -8,7 +8,6 @@ import {
   FaCheck,
   FaFileAlt,
   FaMapMarkerAlt,
-  FaRoad,
   FaRulerCombined,
   FaShieldAlt,
   FaHome,
@@ -20,12 +19,12 @@ import SideEnquiry from "@/components/SideEnquiry";
 const projectSnapshot = [
   ["Project Name", "Dholera Estates"], ["Location", "Akru village, near Dholera SIR, Gujarat"],
   ["Land Type", "Residential Plot"], ["Legal Status", "NA-converted residential plots*"],
-  ["Indicative Price", "Approximately ₹13–17 lakh onwards*"], ["Total Project Area", "Approximately 16 acres*"],
-  ["Available Plot Sizes", "Approximately 170–235 sq. yards"], ["SIR Position", "Near / Outside Dholera SIR Boundary"],
+  ["Total Project Area", "Approximately 16 acres*"], ["Available Plot Sizes", "Approximately 176–235 sq. yards"],
+  ["SIR Position", "Near / Outside Dholera SIR Boundary"],
 ];
 const standoutFactors = [
   "Residential plots in Akru village, near—not inside—the Dholera SIR boundary.",
-  "Approximately 170–235 sq. yd. plot options, subject to availability.",
+  "Approximately 176–235 sq. yd. plot options, subject to availability.",
   "A promoted township of approximately 16 acres.",
   "Clubhouse and proposed temple included in the project information; verify the current layout and status.",
 ];
@@ -47,8 +46,7 @@ const connectivityPoints = [
   "Location near the wider Delhi-Mumbai Industrial Corridor growth region.",
 ];
 const affordabilityPoints = [
-  "Indicative pricing is approximately ₹13–17 lakh onwards, depending on size and availability.",
-  "Confirm all charges and payment terms in a written price sheet.",
+  "Request a written price sheet and confirm all charges and payment terms.",
   "No land purchase guarantees appreciation or returns.",
 ];
 const buyerProfiles = [
@@ -82,8 +80,8 @@ const faqs = [
     "a": "No. The project is described as being near the Dholera SIR boundary, not inside the separately notified SIR planning zone."
   },
   {
-    "q": "What is the indicative starting price?",
-    "a": "Current project information indicates approximately ₹13–17 lakh onwards, depending on plot size and availability. Obtain a written price sheet before deciding."
+    "q": "How can I get current pricing?",
+    "a": "Request a written price sheet from the team and confirm the current price, charges and availability before deciding."
   },
   {
     "q": "Does buying a plot guarantee returns?",
@@ -417,7 +415,7 @@ export default function PropertyDetailPage() {
               className="px-4 pb-4 pt-4 sm:px-6 sm:py-6 md:px-8 lg:px-10"
             >
               <div
-                className="grid grid-cols-2 gap-3 lg:grid-cols-5"
+                className="grid grid-cols-2 gap-3 lg:grid-cols-4"
               >
                 {[
                   {
@@ -433,12 +431,7 @@ export default function PropertyDetailPage() {
                   {
                     icon: <FaBuilding />,
                     title: "Plot Sizes",
-                    value: "170 - 235 Sq. Yd.",
-                  },
-                  {
-                    icon: <FaRoad />,
-                    title: "Price From",
-                    value: "₹13 Lakh*",
+                    value: "176 - 235 Sq. Yd.",
                   },
                   {
                     icon: <FaMapMarkerAlt />,
@@ -532,7 +525,7 @@ export default function PropertyDetailPage() {
                 <p
                   className="mt-6 text-lg font-medium leading-9 text-[#4B5563]"
                 >
-                  Dholera Estates is a residential land project located near—not inside—the Dholera SIR boundary. It promotes NA-converted residential plots of approximately 170 to 235 sq. yards within a planned township.
+                  Dholera Estates is a residential land project located near—not inside—the Dholera SIR boundary. It promotes NA-converted residential plots of approximately 176 to 235 sq. yards within a planned township.
                 </p>
               </motion.div>
               <section className="relative isolate mt-16 overflow-hidden rounded-[30px] border border-[#e8e8f2] bg-white px-5 py-8 shadow-[0_10px_28px_rgba(17,24,39,0.06)] sm:px-8 sm:py-10">
@@ -595,7 +588,7 @@ export default function PropertyDetailPage() {
               <section className="mt-16">
                 <SectionHeading
                   small="Plot Options"
-                  title="Flexible Plot Sizes from 170 to 235 Sq. Yards"
+                  title="Flexible Plot Sizes from 176 to 235 Sq. Yards"
                 />
                 <p className="text-lg font-medium leading-9 text-[#4B5563]">
                   The available size range gives buyers flexibility to evaluate
@@ -628,7 +621,7 @@ export default function PropertyDetailPage() {
               <section className="mt-16">
                 <SectionHeading
                   small="Investment Positioning"
-                  title="Pricing and Purchase Considerations"
+                  title="Purchase Considerations"
                 />
                 <BulletCards items={affordabilityPoints} />
               </section>
@@ -864,13 +857,7 @@ export default function PropertyDetailPage() {
                   <div className="flex justify-between gap-4">
                     <span className="text-[#111111]">Plot Size</span>
                     <span className="font-bold text-[#F90032]">
-                      170 - 235 Sq. Yd.
-                    </span>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <span className="text-[#111111]">Indicative Price</span>
-                    <span className="font-bold text-[#F90032]">
-                      ₹13–17 Lakh*
+                      176 - 235 Sq. Yd.
                     </span>
                   </div>
                   <div className="flex justify-between gap-4">

@@ -6,6 +6,5 @@ export const site = {
 };
 
 export const plots = [
-  { size: "173 Sq. Yd.", price: "₹13,00,000*", label: "Dholera Estate Residential Plot" },
-  { size: "201 Sq. Yd.", price: "₹15,00,000*", label: "Dholera Estate Residential Plot" },
+  { size: "176–235 Sq. Yd.", label: "Dholera Estate Residential Plot" },
 ];

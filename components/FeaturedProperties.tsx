@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import {
   FaMapMarkerAlt,
   FaRulerCombined,
-  FaRoad,
   FaArrowRight,
   FaCheckCircle,
 } from "react-icons/fa";
@@ -31,11 +30,9 @@ const properties = [
 
     location: "Akru Village, Dholera Region, Gujarat",
 
-    size: "170 - 235 Sq. Yd.",
+    size: "176 - 235 Sq. Yd.",
 
     type: "Residential Plot",
-
-    road: "₹13–17 Lakh*",
 
     legalStatus: "NA Converted*",
 
@@ -483,7 +480,7 @@ function PropertyCard({
               grid-cols-1
               gap-2
               sm:mt-5
-              sm:grid-cols-3
+              sm:grid-cols-2
               sm:gap-3
               lg:mt-4
             "
@@ -498,10 +495,6 @@ function PropertyCard({
               value={item.type}
             />
 
-            <InfoItem
-              icon={<FaRoad />}
-              value={item.road}
-            />
           </div>
 
           {/* EXTRA DETAILS */}
@@ -876,7 +869,7 @@ export default function FeaturedProperties() {
               lg:text-base
             "
           >
-            Explore residential plots in Akru village, near—not inside—Dholera SIR. Plot sizes are approximately 170–235 sq. yards, with indicative pricing of ₹13–17 lakh onwards. *Availability, land use and project details require independent verification.
+            Explore residential plots in Akru village, near—not inside—Dholera SIR. Plot sizes are approximately 176–235 sq. yards. *Availability, land use and project details require independent verification.
           </p>
         </motion.div>
 

@@ -12,7 +12,7 @@ The frontend uses the section templates and global stylesheet from the local `dh
 
 ## Content retained for this project
 
-Brand: Dholera Estates. Location: Akru village, near—not inside—Dholera SIR. Approximately 170–235 sq. yd. plots, approximately 16 acres and indicative ₹13–17 lakh onwards, subject to availability and verification. Existing client reviews, property photos, CMS blog feed and enquiry API routes remain specific to this project. Reference commercial/industrial offerings were replaced with this project's residential plots and buyer services.
+Brand: Dholera Estates. Location: Akru village, near—not inside—Dholera SIR. Approximately 176–235 sq. yd. plots and approximately 16 acres, subject to availability and verification. Existing client reviews, property photos, CMS blog feed and enquiry API routes remain specific to this project. Reference commercial/industrial offerings were replaced with this project's residential plots and buyer services.
 
 The properties listing links to `/properties/dholera-estates` for the detailed project information and buyer-verification notes. The old `/properties#project-details` anchor still reaches the property listing.
 

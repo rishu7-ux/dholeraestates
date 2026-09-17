@@ -12,7 +12,7 @@ const highlights = [
 
 const projectDetails = [
   { label: "Prime Location", value: "Akru Village", icon: FaLocationDot },
-  { label: "Plot Size", value: "170 - 235 Sq. Yd.", icon: FaChartLine },
+  { label: "Plot Size", value: "176 - 235 Sq. Yd.", icon: FaChartLine },
   { label: "Documentation", value: "Buyer verification required", icon: FaScaleBalanced },
   { label: "Land Type", value: "Residential Plot", icon: FaHouse },
 ];
@@ -30,7 +30,7 @@ export default function PropertyIntro() {
           <h2 className="mt-3 text-3xl font-black leading-none tracking-[-0.05em] text-[#111827] sm:mt-4 sm:text-5xl lg:text-[58px]">Dholera <span className="brand-gradient-text">Estates</span></h2>
           <p className="mt-2 text-sm font-semibold text-slate-800 sm:text-lg">Akru village near Dholera SIR, Gujarat</p>
           <span className="mt-3 block h-[3px] w-24 bg-linear-to-r from-[#fa7000] via-[#f90032] to-[#960aaa] sm:mt-4 sm:w-28" />
-          <p className="mt-3 max-w-xl text-[13px] leading-[1.65] text-slate-600 sm:mt-4 sm:text-[15px] sm:leading-6">Dholera Estates is a residential plotting project in Akru village, near—not inside—the Dholera Special Investment Region (DSIR). Explore approximately 170–235 sq. yd. plots in a promoted 16-acre township, with location guidance, site visits and documentation support from our team.</p>
+          <p className="mt-3 max-w-xl text-[13px] leading-[1.65] text-slate-600 sm:mt-4 sm:text-[15px] sm:leading-6">Dholera Estates is a residential plotting project in Akru village, near—not inside—the Dholera Special Investment Region (DSIR). Explore approximately 176–235 sq. yd. plots in a promoted 16-acre township, with location guidance, site visits and documentation support from our team.</p>
           <div className="mt-5 grid gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-4">
             {projectDetails.map(({ label, value, icon: Icon }) => (
               <motion.div key={label} whileHover={{ y: -3 }} className="premium-card-sheen relative flex min-h-[88px] items-center gap-3 overflow-hidden rounded-[18px] border border-[#ffdcca] bg-white p-3 shadow-[0_5px_18px_rgba(250,112,0,0.06)] sm:min-h-[118px] sm:gap-4 sm:rounded-[22px] sm:p-4">
@@ -47,7 +47,7 @@ export default function PropertyIntro() {
             <div className="flex items-center gap-3"><p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-slate-600">Investment highlight</p><span className="h-[3px] flex-1 bg-linear-to-r from-[#fa7000] via-[#f90032] to-[#0082fa]" /></div>
             <h3 className="mt-4 text-3xl font-black leading-none tracking-[-0.04em] text-[#111827] sm:text-4xl">Plots near <span className="brand-gradient-text">Dholera SIR</span></h3>
             <div className="mt-3">
-              <p className="min-w-0 flex-1 text-sm leading-6 text-slate-600 sm:max-w-sm">Explore residential plots from approximately ₹13–17 lakh onwards. Confirm availability, pricing and documents before purchase.</p>
+              <p className="min-w-0 flex-1 text-sm leading-6 text-slate-600 sm:max-w-sm">Explore residential plots with current availability, pricing and documents confirmed before purchase.</p>
             </div>
             <div className="mt-4 grid grid-cols-3 divide-x divide-slate-200 sm:mt-6">
               {highlights.map(({ label, detail, icon: Icon, color }) => <div key={detail} className="px-2 first:pl-0 last:pr-0"><Icon className={`mb-2 text-xl ${color}`} aria-hidden="true" /><p className="text-[9px] font-bold leading-tight text-slate-500">{label}<br />{detail}</p></div>)}

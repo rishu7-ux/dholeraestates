@@ -9,7 +9,7 @@ import SideEnquiry from "@/components/SideEnquiry";
 
 const title = "Residential Plots in Akru | Dholera Estates";
 const description =
-  "Browse residential plot options at Dholera Estates, Akru village, near Dholera SIR. Approximately 170–235 sq. yd. plots with indicative pricing and documentation for buyer review.";
+  "Browse residential plot options at Dholera Estates, Akru village, near Dholera SIR. Approximately 176–235 sq. yd. plots with documentation for buyer review.";
 
 export const metadata: Metadata = {
   title,

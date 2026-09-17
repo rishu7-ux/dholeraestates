@@ -81,7 +81,7 @@ const journeyExpansion = [
     icon: FaBuilding,
     title: "Flexible Plot Options",
     description:
-      "Residential plot options ranging from 170 to 235 sq. yards in Dholera Estates.",
+      "Residential plot options ranging from 176 to 235 sq. yards in Dholera Estates.",
   },
   {
     icon: FaHandshake,
@@ -531,7 +531,7 @@ export default function AboutPage() {
                     md:text-[17px]
                   "
                 >
-                  Established in 2024, Dholera Estates promotes a township of approximately 16 acres with residential plots of approximately 170–235 sq. yards and indicative pricing of ₹13–17 lakh onwards. A clubhouse and proposed temple are included in the project information. Confirm the title, NA conversion, layout and exact boundaries independently.
+                  Established in 2024, Dholera Estates promotes a township of approximately 16 acres with residential plots of approximately 176–235 sq. yards. A clubhouse and proposed temple are included in the project information. Confirm the title, NA conversion, layout and exact boundaries independently.
                 </p>
               </motion.div>
 
