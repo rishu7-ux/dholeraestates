@@ -23,6 +23,10 @@ function ArrowLink({ href, children }: { href: string; children: ReactNode }) {
   return <li><Link href={href} className="group flex min-w-0 items-start gap-2 text-[12px] font-medium leading-5 text-[#14203a] transition-colors hover:text-[#f90032] sm:gap-3 sm:text-[15px]"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#fff2ea,#f5efff)] text-[10px] text-[#f90032] transition-transform group-hover:translate-x-1 sm:h-8 sm:w-8 sm:text-xs"><FaArrowRight /></span><span className="min-w-0 break-words">{children}</span></Link></li>;
 }
 
+function ExternalArrowLink({ href, children }: { href: string; children: ReactNode }) {
+  return <li><a href={href} className="group flex min-w-0 items-start gap-2 text-[12px] font-medium leading-5 text-[#14203a] transition-colors hover:text-[#f90032] sm:gap-3 sm:text-[15px]"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#fff2ea,#f5efff)] text-[10px] text-[#f90032] transition-transform group-hover:translate-x-1 sm:h-8 sm:w-8 sm:text-xs"><FaArrowRight /></span><span className="min-w-0 break-words">{children}</span></a></li>;
+}
+
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-[#fbfcff]">
@@ -44,7 +48,12 @@ export default function Footer() {
             <FooterLabel>Explore</FooterLabel>
             <h3 className="mt-3 text-[18px] font-extrabold tracking-[-0.04em] text-[#101827] sm:text-[24px]">Property</h3>
             <span className="mt-4 block h-[3px] w-12 bg-linear-to-r from-[#fa7000] via-[#f90032] to-[#960aaa]" />
-            <ul className="mt-6"><ArrowLink href="/properties/dholera-estates">Dholera Estates</ArrowLink></ul>
+            <ul className="mt-6 space-y-2">
+              <ArrowLink href="/properties/dholera-estates">Dholera Estates</ArrowLink>
+              <ArrowLink href="/properties/dholera-estate-1">Dholera Estates 1</ArrowLink>
+              <ExternalArrowLink href="https://dholeraestate2.com">Dholera Estates 2</ExternalArrowLink>
+              <ArrowLink href="/properties/dholera-estate-3">Dholera Estates 3</ArrowLink>
+            </ul>
           </div>
 
           <div>

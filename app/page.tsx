@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: {
-    canonical: "/",
+    canonical: "https://dholeraestates.com/",
   },
   openGraph: {
     title,
