@@ -8,9 +8,17 @@ const testimonials = [
   { name: "Rajeev Malhotra", image: "/images/testimonial-rajeev-v2.png", review: "The team supported us throughout the process and explained the residential plot options clearly." },
   { name: "Rakesh Jain", image: "/images/testimonial-rakesh-v2.png", review: "The guidance made our property enquiry and plot-selection process straightforward." },
   { name: "Sudha Sharma", image: "/images/testimonial-sudha-v2.png", review: "We appreciated the responsive communication and help with understanding the next steps." },
+  { name: "Naina Vishwakarma", review: "The project information was clear, and the team was helpful throughout our enquiry." },
+  { name: "Aniket Sharma", review: "We received timely guidance on plot options, documentation and the next steps." },
+  { name: "Pallavi Rai", review: "The team made it easy to understand the available residential plot opportunities." },
+  { name: "Milan Yadav", review: "We appreciated the straightforward communication and support during our property search." },
 ];
 
 const runningTestimonials = [...testimonials, ...testimonials];
+
+function initials(name: string) {
+  return name.split(" ").map((part) => part[0]).join("");
+}
 
 export default function Testimonial() {
   return (
@@ -24,7 +32,7 @@ export default function Testimonial() {
           <div className="flex items-center gap-4"><span className="h-[3px] w-14 bg-linear-to-r from-[#fa7000] to-[#f90032]" /><p className="text-xs font-extrabold uppercase tracking-[0.26em] text-[#111827]">Client Experiences</p></div>
           <h2 className="mt-6 text-4xl font-black leading-none tracking-[-0.045em] text-[#101827] sm:text-5xl lg:text-[64px]">OUR <span className="brand-gradient-text">TESTIMONIALS</span></h2>
           <p className="mt-5 max-w-[570px] text-base leading-7 text-[#4b5563] sm:text-lg">See what our clients say about their experience while exploring property opportunities in Dholera.</p>
-          <div className="mt-6 flex gap-2" aria-label="Testimonial slide 1 of 6">{[0, 1, 2, 3, 4, 5].map((dot) => <span key={dot} className={`h-3 w-3 rounded-full ${dot === 0 ? "bg-[#fa7000]" : "bg-slate-300/80"}`} />)}</div>
+          <div className="mt-6 flex gap-2" aria-label="Testimonial carousel">{testimonials.map((testimonial, index) => <span key={testimonial.name} className={`h-3 w-3 rounded-full ${index === 0 ? "bg-[#fa7000]" : "bg-slate-300/80"}`} />)}</div>
         </motion.div>
 
         <p className="absolute right-10 top-10 hidden max-w-[240px] text-xs font-medium uppercase tracking-[0.22em] leading-6 text-white/85 lg:block">People trust us<br />to build a brighter<br />tomorrow <span className="mt-4 block h-px w-12 bg-white/80" /></p>
@@ -35,7 +43,7 @@ export default function Testimonial() {
               <article key={`${testimonial.name}-${index}`} className="premium-card-sheen group relative flex min-h-82.5 w-77.5 shrink-0 flex-col rounded-[22px] bg-white/92 p-5 shadow-[0_10px_28px_rgba(17,17,17,0.12)] backdrop-blur-md sm:min-h-87.5 sm:w-97.5 sm:p-7 lg:w-125 lg:p-8">
                 <div className="flex items-center justify-between text-[#fa7000]"><div className="flex gap-1">{[1, 2, 3, 4, 5].map((star) => <FaStar key={star} className="text-[12px] sm:text-sm" />)}</div><FaQuoteRight className="text-3xl text-[#ffb579]" /></div>
                 <p className="mt-5 text-[13px] leading-7 text-[#4b5563] sm:text-[15px] sm:leading-8">{testimonial.review}</p>
-                <div className="mt-auto border-t-2 border-[#fa7000] pt-5"><div className="flex items-center gap-4"><div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-[3px] border-[#fa7000] sm:h-[72px] sm:w-[72px]"><Image src={testimonial.image} alt={`${testimonial.name} portrait`} fill sizes="72px" className="object-cover" /></div><div><h3 className="text-[18px] font-bold text-[#111827] sm:text-xl">{testimonial.name}</h3><p className="mt-1 text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500 sm:text-xs">Happy Client</p></div></div></div>
+                <div className="mt-auto border-t-2 border-[#fa7000] pt-5"><div className="flex items-center gap-4"><div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-[#fa7000] bg-[#fff0e8] text-sm font-extrabold text-[#f90032] sm:h-[72px] sm:w-[72px] sm:text-base">{testimonial.image ? <Image src={testimonial.image} alt={`${testimonial.name} portrait`} fill sizes="72px" className="object-cover" /> : initials(testimonial.name)}</div><div><h3 className="text-[18px] font-bold text-[#111827] sm:text-xl">{testimonial.name}</h3><p className="mt-1 text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500 sm:text-xs">Happy Client</p></div></div></div>
               </article>
             ))}
           </motion.div>
