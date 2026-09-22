@@ -45,6 +45,7 @@ export default async function BlogDetailPage({
                 alt={blog.imageAlt || blog.title}
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 1024px) 100vw, 1000px"
                 className="object-cover"
               />
