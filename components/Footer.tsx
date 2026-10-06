@@ -50,9 +50,9 @@ export default function Footer() {
             <span className="mt-4 block h-[3px] w-12 bg-linear-to-r from-[#fa7000] via-[#f90032] to-[#960aaa]" />
             <ul className="mt-6 space-y-2">
               <ArrowLink href="/properties/dholera-estates">Dholera Estates</ArrowLink>
-              <ArrowLink href="/properties/dholera-estate-1">Dholera Estates 1</ArrowLink>
+              <ExternalArrowLink href="https://dholeraestate1.com/">Dholera Estates 1</ExternalArrowLink>
               <ExternalArrowLink href="https://dholeraestate2.com">Dholera Estates 2</ExternalArrowLink>
-              <ArrowLink href="/properties/dholera-estate-3">Dholera Estates 3</ArrowLink>
+              <ArrowLink href="/">Dholera Estates 3</ArrowLink>
             </ul>
           </div>
 
