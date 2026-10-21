@@ -16,6 +16,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
 import SideEnquiry from "@/components/SideEnquiry";
+import LeadForm from "@/components/LeadForm";
+import { PROJECT_FAQS } from "@/lib/project-data";
 const projectSnapshot = [
   ["Project Name", "Dholera Estates"], ["Location", "Akru village, near Dholera SIR, Gujarat"],
   ["Land Type", "Residential Plot"], ["Legal Status", "NA-converted residential plots*"],
@@ -69,28 +71,6 @@ const importantConsiderations = [
   "Confirm applicable regulatory registration status before making payment commitments.",
   "Do not rely on guaranteed return or appreciation claims.",
   "Visit the site personally or arrange an independent site inspection where possible.",
-];
-const faqs = [
-  {
-    "q": "What is Dholera Estates?",
-    "a": "Dholera Estates is a residential plotted-development project promoted in Akru village, near the Dholera Special Investment Region in Gujarat."
-  },
-  {
-    "q": "Is Dholera Estates inside Dholera SIR?",
-    "a": "No. The project is described as being near the Dholera SIR boundary, not inside the separately notified SIR planning zone."
-  },
-  {
-    "q": "How can I get current pricing?",
-    "a": "Request a written price sheet from the team and confirm the current price, charges and availability before deciding."
-  },
-  {
-    "q": "Does buying a plot guarantee returns?",
-    "a": "No. No land purchase guarantees appreciation or returns. Outcomes depend on infrastructure execution, market conditions and the specific location."
-  },
-  {
-    "q": "Who may find the project suitable?",
-    "a": "It may suit first-time land buyers, NRIs researching the Dholera region and families seeking a planned residential plot."
-  }
 ];
 const fadeUp = {
   hidden: {
@@ -280,10 +260,10 @@ export default function PropertyDetailPage() {
         />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-white via-white/80 to-transparent" />
         <div
-          className="pointer-events-none absolute -right-20 -top-32 h-[380px] w-[380px] rotate-12 border-[55px] border-white/10"
+          className="pointer-events-none absolute -right-20 -top-32 h-95 w-95 rotate-12 border-55 border-white/10"
         />
         <div
-          className="relative mx-auto flex min-h-50 max-w-7xl items-center px-5 py-8 sm:px-6 sm:min-h-[230px] lg:px-8"
+          className="relative mx-auto flex min-h-50 max-w-7xl items-center px-5 py-8 sm:px-6 sm:min-h-57.5 lg:px-8"
         >
           <motion.div
             initial={{
@@ -767,7 +747,7 @@ export default function PropertyDetailPage() {
                   title="Frequently Asked Questions"
                 />
                 <div className="space-y-4">
-                  {faqs.map((faq, index) => (
+                  {PROJECT_FAQS.map((faq, index) => (
                     <motion.article
                       key={faq.q}
                       initial={{
@@ -833,7 +813,7 @@ export default function PropertyDetailPage() {
                 className="relative overflow-hidden rounded-[26px] border border-[#E5E7EB] bg-[#F8FAFC] p-6 shadow-[0_10px_28px_rgba(17,17,17,0.08)]"
               >
                 <span
-                  className="absolute left-0 top-0 h-[4px] w-full bg-[#F90032]"
+                  className="absolute left-0 top-0 h-1 w-full bg-[#F90032]"
                 />
                 <span
                   className="text-xs font-black uppercase tracking-[0.18em] text-[#F90032]"
@@ -910,7 +890,7 @@ export default function PropertyDetailPage() {
                   Near Dholera SIR
                 </h3>
                 <span
-                  className="mt-3 block h-[3px] w-10 rounded-full bg-[#F90032]"
+                  className="mt-3 block h-0.75 w-10 rounded-full bg-[#F90032]"
                 />
                 <p
                   className="mt-5 text-sm leading-7 text-[#4B5563]"
@@ -924,6 +904,10 @@ export default function PropertyDetailPage() {
             </aside>
           </div>
         </div>
+      </section>
+      <section className="mx-auto max-w-4xl px-5 py-12" aria-label="Dholera Estates enquiry">
+        <h2 className="mb-6 text-3xl font-extrabold text-[#F90032]">Request a call back</h2>
+        <LeadForm compact />
       </section>
       <CTASection />
       <Footer />

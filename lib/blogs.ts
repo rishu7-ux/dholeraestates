@@ -8,6 +8,7 @@ export type Blog = {
   content: string;
   richContentHtml?: string | null;
   publishedAt: string;
+  updatedAt: string;
   imageUrl: string | null;
   imageAlt: string;
 };
@@ -60,6 +61,9 @@ function normalizeBlog(record: CmsRecord): Blog | null {
   const media = isRecord(featuredImage) ? featuredImage : null;
   const imageUrl = text(media?.url ?? record.imageUrl) || null;
 
+  const publishedAt = text(record.publishedAt ?? record.createdAt ?? record.updatedAt)
+    || new Date(0).toISOString();
+
   return {
     id: typeof record.id === "string" || typeof record.id === "number"
       ? record.id
@@ -69,8 +73,8 @@ function normalizeBlog(record: CmsRecord): Blog | null {
     excerpt: text(record.shortDescription ?? record.excerpt),
     content: richText(record.blogContent ?? record.content),
     richContentHtml: richContentHtml(record.richContentHtml),
-    publishedAt: text(record.publishedAt ?? record.updatedAt ?? record.createdAt)
-      || new Date(0).toISOString(),
+    publishedAt,
+    updatedAt: text(record.updatedAt) || publishedAt,
     imageUrl,
     imageAlt: text(media?.alt ?? record.imageAlt) || title,
   };
@@ -93,7 +97,13 @@ function richText(value: unknown): string {
 function richContentHtml(value: unknown): string | null {
   if (typeof value !== "string") return null;
 
-  const html = value.trim();
+  const html = value
+    .trim()
+    .replace(/href=(["'])\/contact\1/gi, "href=$1/contact-us$1")
+    .replace(
+      /href=(["'])https?:\/\/(?:www\.)?dholeraestates\.com\/contact\1/gi,
+      "href=$1https://dholeraestates.com/contact-us$1",
+    );
   if (!html) return null;
 
   const hasVisibleContent =

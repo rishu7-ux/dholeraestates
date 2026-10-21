@@ -17,7 +17,7 @@ const description =
   "Explore Dholera Estates residential plots in Akru village near Dholera SIR, with site visits, project information and buyer support.";
 
 export const metadata: Metadata = {
-  title,
+  title: { absolute: title },
   description,
   alternates: {
     canonical: "https://dholeraestates.com/",
@@ -26,11 +26,20 @@ export const metadata: Metadata = {
     title,
     description,
     type: "website",
+    url: "/",
+    siteName: "Dholera Estates",
+    images: [{
+      url: "/images/dholera-estates-hero-v2.png",
+      width: 2065,
+      height: 761,
+      alt: "Dholera Estates residential plots in Akru",
+    }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title,
     description,
+    images: ["/images/dholera-estates-hero-v2.png"],
   },
 };
 

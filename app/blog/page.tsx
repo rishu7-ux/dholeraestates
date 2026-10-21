@@ -6,10 +6,9 @@ import { FaArrowRight, FaCalendarAlt, FaUserAlt } from "react-icons/fa";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PageHero from "@/components/PageHero";
-import SideEnquiry from "@/components/SideEnquiry";
 import { blogImage, getBlogs } from "@/lib/blogs";
 
-const title = "Dholera Estates Blog | Dholera SIR Updates";
+const title = "Dholera SIR Updates and Plot-Buying Guides";
 const description =
   "Stay updated on Dholera Estates and the wider Dholera SIR region — infrastructure news, plot-buying guides, and investment insights from Omana Projects.";
 
@@ -20,14 +19,23 @@ export const metadata: Metadata = {
     canonical: "https://dholeraestates.com/blog",
   },
   openGraph: {
-    title,
+    title: `${title} | Dholera Estates`,
     description,
     type: "website",
+    url: "/blog",
+    siteName: "Dholera Estates",
+    images: [{
+      url: "/images/dholera-estates-hero-v2.png",
+      width: 2065,
+      height: 761,
+      alt: "Dholera Estates insights and plot-buying guides",
+    }],
   },
   twitter: {
-    card: "summary",
-    title,
+    card: "summary_large_image",
+    title: `${title} | Dholera Estates`,
     description,
+    images: ["/images/dholera-estates-hero-v2.png"],
   },
 };
 
@@ -69,7 +77,7 @@ export default async function BlogPage() {
                     </h2>
                     <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#4B5563]">{blog.excerpt}</p>
                     <Link href={`/blog/${blog.slug}`} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#FA7000] transition-colors hover:text-[#F90032]">
-                      Read More <FaArrowRight className="transition-transform group-hover:translate-x-1" />
+                      Read article<span className="sr-only">: {blog.title}</span> <FaArrowRight className="transition-transform group-hover:translate-x-1" />
                     </Link>
                   </div>
                 </article>
@@ -84,7 +92,6 @@ export default async function BlogPage() {
         </section>
       </main>
       <Footer />
-      <SideEnquiry />
     </>
   );
 }

@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistSans = localFont({
+  src: "./fonts/Geist-Variable.ttf",
+  weight: "100 900",
+  display: "swap",
+  variable: "--font-geist-sans",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMono-Variable.ttf",
+  weight: "100 900",
+  display: "swap",
+  variable: "--font-geist-mono",
+});
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -30,8 +40,24 @@ const organizationJsonLd = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dholeraestates.com"),
   title: { default: "Dholera Estates | Residential Plots in Dholera", template: "%s | Dholera Estates" },
   description: "Explore residential plot options and arrange a site visit with Dholera Estates.",
+  openGraph: {
+    siteName: "Dholera Estates",
+    images: [
+      {
+        url: "/images/dholera-estates-hero-v2.png",
+        width: 2065,
+        height: 761,
+        alt: "Dholera Estates residential plots in Akru",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/images/dholera-estates-hero-v2.png"],
+  },
   icons: {
     icon: [{ url: "/images/dholera-estates-logo.png", type: "image/png" }],
     shortcut: "/images/dholera-estates-logo.png",

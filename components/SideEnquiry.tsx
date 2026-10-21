@@ -36,6 +36,7 @@ const formSchema = z.object({
     .string()
     .min(1, "Phone number is required")
     .regex(/^[0-9]{10}$/, "Enter a valid 10-digit mobile number"),
+  consent: z.boolean().refine(Boolean, "Please agree before submitting"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -62,6 +63,7 @@ export default function SideEnquiry() {
       name: "",
       email: "",
       phone: "",
+      consent: false,
     },
 
     mode: "onSubmit",
@@ -105,6 +107,7 @@ export default function SideEnquiry() {
 
         headers: {
           "Content-Type": "application/json",
+          "x-idempotency-key": crypto.randomUUID(),
         },
 
         body: JSON.stringify({
@@ -117,6 +120,7 @@ export default function SideEnquiry() {
           message: "",
 
           source: "dholeraestates-side-enquiry-form",
+          consent: data.consent,
         }),
       });
 
@@ -905,6 +909,13 @@ export default function SideEnquiry() {
                         {/* =================================================
                             SERVER ERROR
                         ================================================= */}
+                        <div>
+                          <label className="flex items-start gap-2 text-xs text-[#111111]">
+                            <input type="checkbox" {...register("consent")} className="mt-0.5 accent-[#FA7000]" />
+                            <span>I agree to be contacted about this property enquiry.</span>
+                          </label>
+                          {errors.consent && <p className="mt-1 text-xs text-red-600">{errors.consent.message}</p>}
+                        </div>
 
                         {serverError && (
                           <motion.div

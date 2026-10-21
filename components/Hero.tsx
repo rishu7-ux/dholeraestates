@@ -46,6 +46,9 @@ export default function Hero() {
 
           <h1 className="text-[28px] font-black leading-none tracking-[-0.055em] text-[#111827] drop-shadow-[0_1px_0_rgba(255,255,255,0.75)] sm:text-5xl lg:text-[76px]">
             DHOLERA <span className="brand-gradient-text">ESTATES</span>
+            <span className="mt-2 block text-[13px] font-extrabold tracking-[0.08em] text-slate-950 sm:text-lg lg:text-2xl">
+              Residential Plots in Akru
+            </span>
           </h1>
           <p className="mt-1 text-sm font-medium tracking-tight text-slate-900 sm:mt-2 sm:text-xl lg:text-[27px]">
             One Dholera. So Many Cities.

@@ -117,6 +117,7 @@ export default function ContactUsPage() {
 
         headers: {
           "Content-Type": "application/json",
+          "x-idempotency-key": crypto.randomUUID(),
         },
 
         body: JSON.stringify({
@@ -1381,8 +1382,7 @@ export default function ContactUsPage() {
                           />
 
                           <span>
-                            I agree to use my information for enquiry
-                            and marketing communication.
+                            I agree to be contacted about this property enquiry.
                           </span>
                         </label>
 

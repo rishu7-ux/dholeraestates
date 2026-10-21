@@ -6,7 +6,7 @@ export default function ContactForm() {
   async function submit(formData: FormData) {
     setState("loading");
     try {
-      const response = await fetch("/api/contact-messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({...Object.fromEntries(formData), consent: formData.get("consent") === "on"}) });
+      const response = await fetch("/api/contact-messages", { method: "POST", headers: { "Content-Type": "application/json", "x-idempotency-key": crypto.randomUUID() }, body: JSON.stringify({...Object.fromEntries(formData), consent: formData.get("consent") === "on"}) });
       if (!response.ok) throw new Error();
       setState("success");
     } catch { setState("error"); }

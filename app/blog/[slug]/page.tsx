@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,20 +6,110 @@ import { FaArrowLeft, FaCalendarAlt, FaUserAlt } from "react-icons/fa";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import SideEnquiry from "@/components/SideEnquiry";
 import { getBlogs, blogImage } from "@/lib/blogs";
+
+const siteUrl = "https://dholeraestates.com";
+
+type BlogPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const [blog] = await getBlogs(slug);
+
+  if (!blog) {
+    return {
+      title: "Article Not Found",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const canonicalPath = `/blog/${blog.slug}`;
+  const title = blog.title.replace(/\s*[|–—-]\s*Dholera Estates\s*$/i, "");
+  const description = blog.excerpt || `Read ${blog.title} on the Dholera Estates blog.`;
+  const image = blogImage(blog.imageUrl);
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title: `${title} | Dholera Estates`,
+      description,
+      type: "article",
+      url: canonicalPath,
+      siteName: "Dholera Estates",
+      publishedTime: blog.publishedAt,
+      modifiedTime: blog.updatedAt,
+      authors: ["Dholera Estates"],
+      images: [{ url: image, alt: blog.imageAlt || blog.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | Dholera Estates`,
+      description,
+      images: [image],
+    },
+  };
+}
 
 export default async function BlogDetailPage({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+}: BlogPageProps) {
   const { slug } = await params;
   const [blog] = await getBlogs(slug);
   if (!blog) notFound();
 
+  const canonicalUrl = `${siteUrl}/blog/${blog.slug}`;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${canonicalUrl}#article`,
+        mainEntityOfPage: canonicalUrl,
+        headline: blog.title,
+        description: blog.excerpt,
+        image: new URL(blogImage(blog.imageUrl), siteUrl).toString(),
+        datePublished: blog.publishedAt,
+        dateModified: blog.updatedAt,
+        author: {
+          "@type": "Person",
+          name: "Admin",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "Dholera Estates",
+          url: siteUrl,
+          logo: {
+            "@type": "ImageObject",
+            url: `${siteUrl}/images/dholera-estates-logo.png`,
+          },
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${canonicalUrl}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
+          { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
+          { "@type": "ListItem", position: 3, name: blog.title, item: canonicalUrl },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Header />
       <main className="min-h-screen bg-[#F8FAFC]">
         <section className="internal-page-hero border-b border-[#F8FAFC]">
@@ -27,6 +118,8 @@ export default async function BlogDetailPage({
               <Link href="/" className="hover:text-[#F90032]">Home</Link>
               <span>/</span>
               <Link href="/blog" className="hover:text-[#F90032]">Blog</Link>
+              <span>/</span>
+              <span aria-current="page" className="line-clamp-1">{blog.title}</span>
             </div>
             <div className="mt-7 flex items-center gap-3"><span className="brand-accent-line" /><p className="brand-eyebrow">Dholera Estates Insights</p></div>
             <h1 className="mt-4 text-3xl font-black leading-tight tracking-[-0.04em] text-[#101827] sm:text-4xl lg:text-5xl">{blog.title}</h1>
@@ -68,7 +161,6 @@ export default async function BlogDetailPage({
         </section>
       </main>
       <Footer />
-      <SideEnquiry />
     </>
   );
 }
