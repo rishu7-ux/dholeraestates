@@ -7,18 +7,18 @@ import Footer from "@/components/Footer";
 import PageHero from "@/components/PageHero";
 import SideEnquiry from "@/components/SideEnquiry";
 
-const title = "Residential Plots in Akru";
+const title = "Dholera Estates Properties | Akru Village Plots";
 const description =
-  "Browse residential plot options at Dholera Estates, Akru village, near Dholera SIR. Approximately 176–235 sq. yd. plots with documentation for buyer review.";
+  "Explore 176–235 sq. yd. plots at Dholera Estates in Akru village on Cher Road, with project information and documentation for buyer review.";
 
 export const metadata: Metadata = {
-  title,
+  title: { absolute: title },
   description,
   alternates: {
     canonical: "https://dholeraestates.com/properties",
   },
   openGraph: {
-    title: `${title} | Dholera Estates`,
+    title,
     description,
     type: "website",
     url: "/properties",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${title} | Dholera Estates`,
+    title,
     description,
     images: ["/images/property-overview-background.png"],
   },
@@ -44,8 +44,8 @@ export default function PropertiesPage() {
       <Header />
       <PageHero
         eyebrow="Curated opportunities"
-        title={<>Residential Plots in <span className="brand-gradient-text">Akru</span></>}
-        description="Explore residential plot options at Dholera Estates, with clear project information and guidance from our team."
+        title={<>Dholera Estates Properties | <span className="brand-gradient-text">Akru Village Plots</span></>}
+        description="Explore 176–235 sq. yd. plots in Akru village on Cher Road, with clear project information and guidance from our team."
         backgroundImage="/images/property-overview-background.png"
       />
       <FeaturedProperties />

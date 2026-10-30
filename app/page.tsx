@@ -14,7 +14,7 @@ import { getBlogs } from "@/lib/blogs";
 
 const title = "Dholera Estates | Residential Plots in Akru, Dholera";
 const description =
-  "Explore Dholera Estates residential plots in Akru village near Dholera SIR, with site visits, project information and buyer support.";
+  "Residential plots of 176–235 sq. yd. in Akru village, Cher Road, about 700 m from the Dholera SIR boundary. Site visits and document support.";
 
 export const metadata: Metadata = {
   title: { absolute: title },
